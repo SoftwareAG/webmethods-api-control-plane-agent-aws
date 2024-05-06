@@ -26,7 +26,7 @@ Ensure that you have:
 
 	 For example: docker build . --tag=aws-agent-appln
 	 
-	![](../docs/docker_build)
+![](../docs/docker_build)
 	 
 	 Verify if *aws-agent-appln* image is listed in the docker client.
 	 
