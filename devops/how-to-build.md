@@ -19,9 +19,9 @@ Let’s look at a sample scenario through which you can build a Gradle project u
 
 4.	Run the following command in the Visual Studio Terminal to build the project:
 
-	 ```./gradlew build ```
+	 ``` ./gradlew build ```
 
-	 ![image](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/docs/gradle_build)
+	 ![image](../gradle_build)
 
 *Build Successful* message appears, and the Jars are created for the application and Lambda functions.
 
