@@ -26,7 +26,7 @@ Ensure that you have:
 
 	 For example: docker build . --tag=aws-agent-appln
 	 
-	 ![image](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/docs/docker_build)
+	 ![image](../docs/docker_build)
 	 
 	 Verify if *aws-agent-appln* image is listed in the docker client.
 	 
