@@ -3,8 +3,8 @@
 
 **Pre-requisites:** Ensure that you have:
 
-•	Access to Agent SDK Jars in Empower portal. For details, see [How to access Agent SDK Jars](https://docs.webmethods.io/apicontrolplane/agent_sdk/chapter2wco#ta-implementing_agentsdk).
-•	Cloned webmethods-api-control-plane-agent-aws Git Hub repository using any GIT client.
+- Access to Agent SDK Jars in Empower portal. For details, see [How to access Agent SDK Jars](https://docs.webmethods.io/apicontrolplane/agent_sdk/chapter2wco#ta-implementing_agentsdk).
+- Cloned webmethods-api-control-plane-agent-aws Git Hub repository using any GIT client.
 
 
 **To build the Gradle project**
