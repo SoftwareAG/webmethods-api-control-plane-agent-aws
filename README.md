@@ -54,7 +54,7 @@ To deploy a Spring boot application in Docker, see [How to deploy?](application/
 
 ## Best Practices
 
-[Best Practices](docs/best-practices.md)
+To learn about the best practices, see [Best Practices](docs/best-practices.md)
 
 
 ## References
