@@ -23,5 +23,5 @@ Let’s look at a sample scenario through which you can build a Gradle project u
 
 	 ![image](../docs/gradle_build.png)
 
-        *Build Successful* message appears, and the Jars are created for the application and Lambda functions.
+   *Build Successful* message appears, and the Jars are created for the application and Lambda functions.
 
