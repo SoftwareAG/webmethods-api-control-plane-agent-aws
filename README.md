@@ -25,12 +25,12 @@ API Control Plane Agent for Amazon API Gateway offers two distinct deployment mo
 
 ## How is this repository structured?
 
-To know how the repository is structured, see [Repository structure](docs/repo-structure.md)
+To know how the repository is structured, see [Repository structure](docs/repo-structure.md).
 
 
 ## Co-relation between Amazon API Gateway and API Control Plane terminologies
 
-To understand the co-relation between Amazon API Gateway and API Control Plane terminologies, see [Co-relation](docs/corelation.md)
+To understand the co-relation between Amazon API Gateway and API Control Plane terminologies, see [Co-relation](docs/corelation.md).
 
 
 ## How to build the Gradle project?
