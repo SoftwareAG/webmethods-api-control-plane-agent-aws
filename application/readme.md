@@ -110,6 +110,6 @@ Let’s look at a sample scenario through which you can run the spring boot appl
 
 	 The output must be as follows:
 
-![image](docs/docker_compose.png)
+![image](../docs/docker_compose.png)
 
 
