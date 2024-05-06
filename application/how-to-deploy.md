@@ -51,7 +51,7 @@ Let’s look at a sample scenario through which you can run the spring boot appl
 
 | Properties | Description |
 |--------------------|-------------------|
-| AWS_AGENT_IMAGE |	Docker Image name. |
+| AWS_AGENT_IMAGE | Docker Image name. |
 | AWS_REGION | The region name in which the AWS API Gateway service is hosted. |
 | AWS_STAGE | Stage (Runtime) name in AWS Gateway. |
 | AWS_ACCESS_KEY_ID| Access key of the IAM user.<br>Use the property only if you have specified ENV_VARIABLE as the AwsCredentialsProvider. For details, see [Authentication] (docs/authentication). |	 
