@@ -1,5 +1,5 @@
 
-## How to deploy a Spring boot application in Docker
+## How to deploy a Spring boot application in Docker?
 
 Let’s look at a sample scenario through which you can deploy a spring boot application in Docker using Visual Studio Code editor.
 
@@ -26,7 +26,7 @@ Ensure that you have:
 
 	 For example: docker build . --tag=aws-agent-appln
 	 
-	 ![image](../docs/docker_build)
+	 ![](../docs/docker_build)
 	 
 	 Verify if *aws-agent-appln* image is listed in the docker client.
 	 
