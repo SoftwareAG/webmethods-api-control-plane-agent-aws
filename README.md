@@ -58,7 +58,7 @@ To learn about the best practices, see [Best Practices](docs/best-practices.md)
 
 
 ## References
-[Authentication](docs/authentication.md) section.
+To learn about authentication, see [Authentication](docs/authentication.md) section.
 
 
 
