@@ -39,11 +39,11 @@ Let’s look at a sample scenario through which you can run the spring boot appl
 
 1.	Configure API Control Plane agent with a set of properties.
 
-Go to *webmethods-api-control-plane-agent-aws\devops\docker-compose* using the following commands in the Visual Studio Terminal:
+	 Go to *webmethods-api-control-plane-agent-aws\devops\docker-compose* using the following commands in the Visual Studio Terminal:
 
-``` cd devops ```
+	 ``` cd devops ```
 	 
-``` cd docker-compose ```
+	 ``` cd docker-compose ```
 
 .env and docker-compose.yml file contains properties related to:
 
