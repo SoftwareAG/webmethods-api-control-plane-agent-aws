@@ -18,6 +18,6 @@ If 'API4' is deployed across stages, 'dev' and 'prod' in 'us-east-1' region unde
 
 The following figure helps you identify the distinct stage:
 
-![image](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/assets/162564415/016647a7-af4d-464e-ae94-5af78f7a8d60)
+![](assets/162564415/016647a7-af4d-464e-ae94-5af78f7a8d60)
 
 
