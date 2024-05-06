@@ -110,6 +110,6 @@ Let’s look at a sample scenario through which you can run the spring boot appl
 
 	 The output must be as follows:
 
-![image](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/docs/docker_compose)
+![image](docs/docker_compose.png)
 
 
