@@ -106,9 +106,9 @@ Let’s look at a sample scenario through which you can run the spring boot appl
 
 2. Run the following command:
 
-``` docker-compose up -d ```
+	``` docker-compose up -d ```
 
-The output must be as follows:
+	 The output must be as follows:
 
 ![image](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/docs/docker_compose)
 
