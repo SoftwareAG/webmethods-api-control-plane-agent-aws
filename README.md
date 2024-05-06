@@ -25,17 +25,17 @@ API Control Plane Agent for Amazon API Gateway offers two distinct deployment mo
 
 ## How is this repository structured?
 
-[Repository structure](docs/repo-structure)
+[Repository structure](docs/repo-structure.md)
 
 
 ## Co-relation between Amazon API Gateway and API Control Plane terminologies
 
-[Co-relation](docs/corelation)
+[Co-relation](docs/corelation.md)
 
 
 ## How to build the Gradle project?
 
-[How to build?](devops/how-to-build)
+[How to build?](devops/how-to-build.md)
 
 The Jars are created at the following locations for both the deployment modes:
 
@@ -49,16 +49,16 @@ The Jars are created at the following locations for both the deployment modes:
 
 ## How to deploy a Spring boot application in Docker?
 
-[How to deploy?](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/application/how-to-deploy)
+[How to deploy?](application/how-to-deploy.md)
 
 
 ## Best Practices
 
-[Best Practices](https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/docs/best-practices)
+[Best Practices](docs/best-practices.md)
 
 
 ## References
-[Authentication] section(https://github.com/SoftwareAG/webmethods-api-control-plane-agent-aws/docs/authentication).
+[Authentication](docs/authentication.md) section.
 
 
 
