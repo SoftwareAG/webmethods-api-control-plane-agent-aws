@@ -39,12 +39,12 @@ To build the Gradle project, see [How to build?](devops/)
 
 The Jars are created at the following locations for both the deployment modes:
 
-**Spring boot application:** application-0.0.1-SNAPSHOT is created at application / build / libs <br><br>
+**Spring boot application:** *application-0.0.1-SNAPSHOT* is created at application / build / libs <br><br>
 **AWS Lambda:** 
-- lambda-layer.zip is created at functions / build / libs, which includes all dependencies to run lambda function.
-- send-asset.jar is created at Functions / send–asset  / build / libs
-- send-heartbeat.jar is created at Functions / send-heartbeat / build / libs
-- send-metrics.jar is created at Functions / send-metrics / build / libs
+- *lambda-layer.zip* is created at functions / build / libs, which includes all dependencies to run lambda function.
+- *send-asset.jar* is created at Functions / send–asset  / build / libs
+- *send-heartbeat.jar* is created at Functions / send-heartbeat / build / libs
+- *send-metrics.jar* is created at Functions / send-metrics / build / libs
 
 
 ## How to deploy a Spring boot application in Docker?
@@ -54,7 +54,7 @@ To deploy a Spring boot application in Docker, see [How to deploy?](application/
 
 ## Best Practices
 
-To learn about the best practices, see [Best Practices](docs/best-practices.md)
+To learn about the best practices, see [Best Practices](docs/best-practices.md).
 
 
 ## References
