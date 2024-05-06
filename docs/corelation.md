@@ -10,11 +10,11 @@
 
 For AWS API Gateway, you must develop an Agent for each distinct Stage. For example:
 
-If ‘API1’ and ‘API2’ are deployed across stages, 'dev' and 'qa' in 'us-east-1' region under 'account1', 2 runtimes are required. That is, an Agent must be deployed for ‘dev’ and ‘qa’ each.
+If *API1* and *API2* are deployed across stages, *dev* and *qa* in *us-east-1* region under *account1*, 2 runtimes are required. That is, an Agent must be deployed for ‘dev’ and ‘qa’ each.
 
-If 'API3' is deployed across stages, 'dev', 'pre-prod', and 'prod' in 'us-east-2' region under 'account1', 3 more runtimes are required. That is, an Agent must be deployed for ‘dev’, ‘pre-prod, and ‘prod’ each.
+If *API3* is deployed across stages, *dev*, *pre-prod*, and *prod* in *us-east-2* region under *account1*, 3 more runtimes are required. That is, an Agent must be deployed for ‘dev’, ‘pre-prod, and ‘prod’ each.
 
-If 'API4' is deployed across stages, 'dev' and 'prod' in 'us-east-1' region under 'account2', 2 additional runtimes are required. That is, an Agent must be deployed for ‘dev’ and ‘prod’ each.
+If *API4* is deployed across stages, *dev* and *prod* in *us-east-1* region under *account2*, 2 additional runtimes are required. That is, an Agent must be deployed for ‘dev’ and ‘prod’ each.
 
 The following figure helps you identify the distinct stage:
 
