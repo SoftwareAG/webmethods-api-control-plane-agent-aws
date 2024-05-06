@@ -1,0 +1,23 @@
+/*
+ * Build requirements
+ */
+plugins {
+    id 'java'
+}
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+configurations.implementation.setCanBeResolved(true)
+
+task buildZip(type: Zip) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    into('lib') {
+        from(jar)
+        from(configurations.runtimeClasspath)
+    }
+}
+
+build.dependsOn buildZip

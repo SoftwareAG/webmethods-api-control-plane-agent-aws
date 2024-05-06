@@ -1,0 +1,21 @@
+/* Need to register my string converters at the very beginning */
+String.metaClass.toProjectName  = { -> projectNameConverter(delegate)   }
+
+rootProject.name = 'common'
+
+checkProjectDirs 'modules'
+
+/* Helper methods */
+def checkProjectDirs(String domain) {
+    new File(rootDir, domain).eachDirMatch ~/^[a-z].*/, { addModule domain, it }
+}
+def addModule(String domain, File moduleDir) {
+    def path = ":$domain:" + moduleDir.name.toProjectName()
+    path = domain != 'tests' ? path : "$path-test"
+    include(path)
+    project(path).projectDir = moduleDir
+}
+/* My string converter implementations */
+def projectNameConverter( orig) {
+    orig.replaceAll('(spm-?|cmp-?|^)(.*)', '$1-$2').replaceAll('^-|-$','').replaceAll('--','-')
+}

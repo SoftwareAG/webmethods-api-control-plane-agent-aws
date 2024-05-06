@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+}
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+configurations.implementation.setCanBeResolved(true)
+
+task buildFatJar(type: Jar) {
+    archiveBaseName = "$archiveJarName"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    destinationDirectory = file('../build/libs/java/lib')
+}
+
+task buildLayerZip(type: Zip) {
+    from '../build/libs'
+    include 'java/*/*'
+    archiveFileName = "$archiveLayerName"
+    destinationDirectory = (file('../build/libs'))
+
+    doLast {
+        delete '../build/libs/java'
+        delete '../build/libs/functions.jar'
+    }
+}
+
+task buildZip(type: Zip) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    into('lib') {
+        from(jar)
+        from(configurations.runtimeClasspath)
+    }
+}
+
+buildLayerZip.dependsOn buildFatJar
+build.dependsOn buildLayerZip
+build.dependsOn buildZip

@@ -1,0 +1,25 @@
+/*
+ * Build requirements
+ */
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+}
+
+apply from: 'dependencies.gradle'
+
+group = 'com.softwareag.controlplane.agentaws'
+
+repositories {
+	mavenCentral()
+}
+subprojects { sub ->
+	repositories {
+		mavenCentral()
+	}
+}
+
+
+
+

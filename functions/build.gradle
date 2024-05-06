@@ -1,0 +1,52 @@
+/*
+ * Build requirements
+ */
+plugins {
+	id 'java'
+}
+apply plugin: 'java'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	springVersion = '6.0.14'
+	commonDependencies = [
+			fileTree(dir: '../libs', include: '*.jar'),
+			rootProject.agentSdkDependencies,
+
+			'com.softwareag.controlplane.agentaws:utils',
+			'com.softwareag.controlplane.agentaws:heartbeat-handler',
+			'com.softwareag.controlplane.agentaws:metrics-handler',
+			'com.softwareag.controlplane.agentaws:assets-handler',
+			'com.amazonaws:aws-lambda-java-log4j2:1.6.0',
+			'com.amazonaws:aws-lambda-java-events:3.11.3',
+			'com.amazonaws:aws-lambda-java-core:1.2.3',
+			'software.amazon.awssdk:sts:2.23.18',
+			'software.amazon.awssdk:apigateway:2.23.18',
+			'software.amazon.awssdk:cloudwatch:2.23.18',
+			'software.amazon.awssdk:cloudtrail:2.23.18',
+			'org.json:json:20231013',
+			"org.springframework:spring-core:$springVersion",
+			"org.springframework:spring-context:$springVersion",
+			"org.springframework:spring-beans:$springVersion",
+			'org.apache.logging.log4j:log4j-layout-template-json:2.20.0',
+			'org.apache.commons:commons-lang3:3.14.0',
+			'jakarta.validation:jakarta.validation-api:3.0.2',
+			'org.springframework.boot:spring-boot-starter-validation:3.2.2',
+			'jakarta.el:jakarta.el-api:5.0.1',
+			'javax.el:javax.el-api:2.2.4',
+			'org.glassfish.web:javax.el:2.2.4',
+	]
+	archiveJarName = 'lambda-layer'
+	archiveLayerName = 'lambda-layer.zip'
+}
+
+subprojects {
+	apply plugin: 'java'
+
+	dependencies {
+		implementation commonDependencies
+	}
+}

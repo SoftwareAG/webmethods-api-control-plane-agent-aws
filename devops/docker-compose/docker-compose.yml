@@ -1,0 +1,49 @@
+version: "3.5"
+
+services:
+  aws-agent:
+    image: ${AWS_AGENT_IMAGE}
+    container_name: aws-apigateway-agent
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - aws.region=${AWS_REGION}
+      - aws.stage=${AWS_STAGE}
+      - aws.metrics-by-data-or-statistics=${AWS_METRICS_BY_DATA_OR_STATISTICS}
+      - aws.assets-sync-buffer-interval-seconds=${AWS_ASSETS_SYNC_BUFFER_INTERVAL_SECONDS}
+      - aws.metrics-sync-buffer-interval-seconds=${AWS_METRICS_SYNC_BUFFER_INTERVAL_SECONDS}
+      - apicp.publish-assets=${APICP_PUBLISH_ASSETS}
+      - apicp.sync-assets=${APICP_SYNC_ASSETS}
+      - apicp.sync-metrics=${APICP_SEND_METRICS}
+      - apicp.heartbeat-sync-interval-seconds=${APICP_HEARTBEAT_SEND_INTERVAL_SECONDS}
+      - apicp.assets-sync-interval-seconds=${APICP_ASSETS_SYNC_INTERVAL_SECONDS}
+      - apicp.metrics-sync-interval-seconds=${APICP_METRICS_SEND_INTERVAL_SECONDS}
+      - apicp.runtime.name=${APICP_RUNTIME_NAME}
+      - apicp.runtime.description=${APICP_RUNTIME_DESCRIPTION}
+      - apicp.runtime.region=${APICP_RUNTIME_REGION}
+      - apicp.runtime.location=${APICP_RUNTIME_LOCATION}
+      - apicp.runtime.tags=${APICP_RUNTIME_TAGS}
+      - apicp.runtime.capacity-value=${APICP_RUNTIME_CAPACITY_VALUE}
+      - apicp.runtime.capacity-unit=${APICP_RUNTIME_CAPACITY_UNIT}
+      - apicp.runtime.type-id=${APICP_RUNTIME_TYPE_ID}
+      - apicp.control-plane.url=${APICP_URL}
+      - apicp.control-plane.username=${APICP_USERNAME}
+      - apicp.control-plane.password=${APICP_PASSWORD}
+      - apicp.control-plane.ssl-enabled=${APICP_SSL_ENABLED}
+      - apicp.control-plane.trust-store-path=/opt/softwareag/certs/trust_store.jks
+      - apicp.control-plane.trust-store-password=${APICP_TRUSTSTORE_PASSWORD}
+      - apicp.control-plane.trust-store-type=${APICP_TRUSTSTORE_TYPE}
+      - apicp.control-plane.key-store-path=${APICP_KEYSTORE_PATH}
+      - apicp.control-plane.key-store-password=${APICP_KEYSTORE_PASSWORD}
+      - apicp.control-plane.key-store-type=${APICP_KEYSTORE_TYPE}
+      - apicp.control-plane.key-alias=${APICP_KEY_ALIAS}
+      - apicp.control-plane.key-password=${APICP_KEY_PASSWORD}
+      - AWS_CREDENTIALS_PROVIDER=ENV_VARIABLE
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+
+    # Uncomment the volumes config section if ssl is enabled
+
+#    volumes:
+#      - ${APICP_TRUSTSTORE_PATH}:/opt/softwareag/certs/trust_store.jks
