@@ -63,7 +63,7 @@ Let’s look at a sample scenario through which you can run the spring boot appl
 **AWS Agent configurations** let you specify the Agent configurations such as heart beat interval, assets sync interval, metrics sync interval, and so on.
 
 | Properties | Description | Possible Values |
-|--------------------|-------------------|
+|--------------------|-------------------|-------------------|
 | APICP_PUBLISH_ASSETS | Enable or disable the publishing of assets to API Control Plane. | <ul><li>true</li><li>false</li></ul><br>Assets are published to API Control Plane whenever the Agent starts, provided that **publishAssets** is set to true |
 | APICP_SYNC_ASSETS  | Enable or disable syncing of assets to API Control Plane. | <ul><li>true</li><li>false</li></ul><br>Assets are synchronized periodically according to the configured synchronization values. Within each synchronization interval, only the assets that are newly created, updated, or deleted are synchronized with API Control Plane.|
 | APICP_SEND_METRICS   | Enable or disable sending API metrics to API Control Plane. | <ul><li>true</li><li>false</li></ul>|
