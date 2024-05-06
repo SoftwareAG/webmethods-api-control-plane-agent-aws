@@ -35,7 +35,7 @@ To understand the co-relation between Amazon API Gateway and API Control Plane t
 
 ## How to build the Gradle project?
 
-To build the Gradle project, see [How to build?](devops/how-to-build.md)
+To build the Gradle project, see [How to build?](devops/)
 
 The Jars are created at the following locations for both the deployment modes:
 
@@ -49,7 +49,7 @@ The Jars are created at the following locations for both the deployment modes:
 
 ## How to deploy a Spring boot application in Docker?
 
-To deploy a Spring boot application in Docker, see [How to deploy?](application/how-to-deploy.md)
+To deploy a Spring boot application in Docker, see [How to deploy?](application/)
 
 
 ## Best Practices
