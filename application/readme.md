@@ -26,9 +26,9 @@ Ensure that you have:
 
 	 For example: docker build . --tag=aws-agent-appln
 	 
-![](../docs/docker_build)
+      ![](../docs/docker_build.png)
 	 
-	 Verify if *aws-agent-appln* image is listed in the docker client.
+      Verify if *aws-agent-appln* image is listed in the docker client.
 	 
 	 
 ## How to run the Spring boot application in Docker?
