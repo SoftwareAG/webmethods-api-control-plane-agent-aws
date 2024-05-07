@@ -26,9 +26,10 @@ dependencies {
     implementation fileTree(dir: '../libs', include: '*.jar')
     implementation rootProject.agentSdkDependencies
 
-    implementation 'com.softwareag.controlplane.agentaws:heartbeat-handler'
-    implementation 'com.softwareag.controlplane.agentaws:metrics-handler'
-    implementation 'com.softwareag.controlplane.agentaws:assets-handler'
+    implementation project(':common:modules:assets-handler')
+    implementation project(':common:modules:metrics-handler')
+    implementation project(':common:modules:heartbeat-handler')
+    implementation project(':common:modules:auth')
     implementation 'org.json:json:20231013'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
     implementation 'org.apache.commons:commons-lang3:3.12.0'

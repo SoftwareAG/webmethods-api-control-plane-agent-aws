@@ -8,10 +8,11 @@ def projectNameConverter( orig) {
     orig.replaceAll('(is-?|spm-?|cce-?|cmp-?|mws-?|bas-sd-?|^)(.*)', '$1-' + rootProject.name + '-$2').replaceAll('^-|-$','').replaceAll('--','-')
 }
 
-includeBuild 'common'
-//file('functions').listFiles().each { File moduleBuild ->
-//    includeBuild moduleBuild
-//}
+include 'common:modules:assets-handler'
+include 'common:modules:metrics-handler'
+include 'common:modules:heartbeat-handler'
+include 'common:modules:auth'
+include 'common:modules:utils'
 include 'application'
 include 'functions:send-asset'
 include 'functions:send-heartbeat'
