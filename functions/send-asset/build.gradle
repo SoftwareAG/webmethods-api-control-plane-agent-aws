@@ -36,6 +36,11 @@ task buildZip(type: Zip) {
     }
 }
 
+buildFatJar.dependsOn ':common:modules:auth:jar'
+buildFatJar.dependsOn ':common:modules:utils:jar'
+buildFatJar.dependsOn ':common:modules:assets-handler:jar'
+buildFatJar.dependsOn ':common:modules:metrics-handler:jar'
+buildFatJar.dependsOn ':common:modules:heartbeat-handler:jar'
 buildLayerZip.dependsOn buildFatJar
 build.dependsOn buildLayerZip
 build.dependsOn buildZip

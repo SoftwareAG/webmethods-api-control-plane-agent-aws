@@ -1,0 +1,7 @@
+/*
+ * Build requirements
+ */
+plugins {
+    id 'java'
+}
+apply plugin: 'java'

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api project(':modules:auth')
+    api project(':common:modules:auth')
 
     implementation fileTree(dir: '../../../libs', include: '*.jar')
     implementation rootProject.agentSdkDependencies
@@ -11,7 +11,7 @@ dependencies {
     implementation 'software.amazon.awssdk:apigateway:2.23.18'
     implementation 'software.amazon.awssdk:cloudwatch:2.23.18'
     implementation 'software.amazon.awssdk:cloudtrail:2.23.18'
-    implementation project(':modules:assets-handler')
+    implementation project(':common:modules:assets-handler')
     implementation 'org.json:json:20231013'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'

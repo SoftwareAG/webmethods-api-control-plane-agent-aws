@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api project(':modules:auth')
+    api project(':common:modules:auth')
 
     implementation fileTree(dir: '../../../libs', include: '*.jar')
     implementation rootProject.agentSdkDependencies
