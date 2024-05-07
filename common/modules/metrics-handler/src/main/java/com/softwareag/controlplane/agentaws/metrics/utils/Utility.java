@@ -30,7 +30,7 @@ public class Utility {
     public static Instant alignTimestampsWithInterval(long epochTimestamp, long interval) {
         Instant timestamp = Utility.getInstant(epochTimestamp);
         long remainder = timestamp.toEpochMilli() % (interval * 1000);
-        long alignedEpochTimestampMillis = epochTimestamp - remainder;
+        long alignedEpochTimestampMillis = ((epochTimestamp - remainder) / 1000) * 1000;
         return Instant.ofEpochMilli(alignedEpochTimestampMillis);
     }
 
