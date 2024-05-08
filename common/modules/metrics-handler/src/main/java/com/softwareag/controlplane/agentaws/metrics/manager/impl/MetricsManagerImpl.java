@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static com.softwareag.controlplane.agentaws.metrics.utils.MetricsModelConverter.updateMetricsMap;
 
@@ -117,6 +119,7 @@ public class MetricsManagerImpl implements MetricsManager {
             currentTimestamp += (interval * 1000);
         }
 
+        Collections.sort(metricsList, Comparator.comparingLong(Metrics::getTimestamp));
         return metricsList;
     }
 
