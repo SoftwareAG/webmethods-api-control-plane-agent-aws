@@ -18,6 +18,10 @@ import java.util.Map;
  * Model converter to convert from Cloudwatch results to Agent SDK Metrics model
  */
 public class MetricsModelConverter {
+    private MetricsModelConverter() {
+
+    }
+
     /**
      * Creates an instance of APITransactionMetrics.
      *
@@ -68,6 +72,8 @@ public class MetricsModelConverter {
      * @return An instance of Metrics with no transactions and the provided timestamp.
      */
     public static Metrics createNoTransanctionMetrics(long timestamp) {
+        List<APITransactionMetrics> apiTransactionMetricsList = new ArrayList<>();
+
         APIMetrics apiMetrics = new APIMetrics.Builder(0L)
                 .averageBackendResponseTime((float) 0)
                 .averageLatency((float) 0)
@@ -75,7 +81,7 @@ public class MetricsModelConverter {
                 .build();
 
         return new Metrics.Builder()
-                .apiTransactionMetricsList(new ArrayList())
+                .apiTransactionMetricsList(apiTransactionMetricsList)
                 .runtimeTransactionMetrics(new RuntimeTransactionMetrics.Builder(apiMetrics).build())
                 .timestamp(timestamp).build();
     }
@@ -110,9 +116,10 @@ public class MetricsModelConverter {
             clientError += apiTransactionMetrics.getMetricsByStatusCode().get(Constants.CP_METRIC_CLIENT_ERROR).getTransactionCount();
             serverError += apiTransactionMetrics.getMetricsByStatusCode().get(Constants.CP_METRIC_SERVER_ERROR).getTransactionCount();
         }
-        APIMetrics runtimeMetrics = new APIMetrics.Builder(totalTransactionCount).averageLatency(totalLatencyOfAllApis / totalTransactionCount)
-                .averageBackendResponseTime(totalBackendResponseTimeOfAllApis / totalTransactionCount)
-                .averageResponseTime(totalResponseTimeOfAllApis / totalTransactionCount).build();
+        APIMetrics runtimeMetrics = new APIMetrics.Builder(totalTransactionCount)
+                .averageLatency(totalLatencyOfAllApis != 0 && totalTransactionCount != 0 ? totalLatencyOfAllApis / totalTransactionCount : 0)
+                .averageBackendResponseTime(totalBackendResponseTimeOfAllApis != 0 && totalTransactionCount != 0 ? totalBackendResponseTimeOfAllApis / totalTransactionCount : 0)
+                .averageResponseTime(totalResponseTimeOfAllApis != 0 && totalTransactionCount != 0 ? totalResponseTimeOfAllApis / totalTransactionCount : 0).build();
 
         RuntimeTransactionMetrics runtimeTransactionMetrics = new RuntimeTransactionMetrics.Builder(runtimeMetrics).build();
         Map<String, APIMetrics> metricsByStatusCode = new HashMap<>();
@@ -145,9 +152,7 @@ public class MetricsModelConverter {
     public static void updateMetricsMap(Map<Long, List<APITransactionMetrics>> apiMetricsMap,
                                         APITransactionMetrics apiTransactionMetrics, Instant timeStamp) {
         long timestamp = timeStamp.toEpochMilli();
-        if (!apiMetricsMap.containsKey(timestamp)) {
-            apiMetricsMap.put(timestamp, new ArrayList<>());
-        }
+        apiMetricsMap.computeIfAbsent(timestamp, k -> new ArrayList<>());
         apiMetricsMap.get(timestamp).add(apiTransactionMetrics);
     }
 }

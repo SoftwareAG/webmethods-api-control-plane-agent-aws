@@ -2,9 +2,7 @@ package com.softwareag.controlplane.agentaws.metrics.utils;
 
 import com.softwareag.controlplane.agentaws.metrics.constants.Constants;
 import software.amazon.awssdk.services.cloudwatch.model.Dimension;
-import software.amazon.awssdk.services.cloudwatch.model.Metric;
 import software.amazon.awssdk.services.cloudwatch.model.MetricDataQuery;
-import software.amazon.awssdk.services.cloudwatch.model.MetricStat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +11,9 @@ import java.util.List;
  * Util class for Cloudwatch
  */
 public class CloudWatchUtil {
+    private CloudWatchUtil() {
+
+    }
 
     /**
      * Creates a list of dimensions for querying metrics by API name and stage.
@@ -64,20 +65,11 @@ public class CloudWatchUtil {
      */
     private static MetricDataQuery createMetricDataQuery(String metricId, String metricName, List<Dimension> dimensions, String statistic,
                                                          Integer period) {
-        Metric met = Metric.builder()
-                .metricName(metricName)
-                .dimensions(dimensions)
-                .namespace(Constants.CLOUDWATCH_AWS_NAMESPACE)
-                .build();
-
-        MetricStat metStat = MetricStat.builder()
-                .stat(statistic)
-                .period(period)
-                .metric(met)
-                .build();
 
         return MetricDataQuery.builder()
-                .metricStat(metStat)
+                .metricStat(metStat -> metStat.stat(statistic)
+                        .period(period)
+                        .metric(met -> met.metricName(metricName).dimensions(dimensions).namespace(Constants.CLOUDWATCH_AWS_NAMESPACE)))
                 .id(metricId)
                 .returnData(true)
                 .build();

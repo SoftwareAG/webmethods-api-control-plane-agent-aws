@@ -22,17 +22,6 @@ import software.amazon.awssdk.services.sts.model.GetCallerIdentityResponse;
  */
 @Configuration
 public class SDKConfigManager {
-    @Autowired
-    ControlPlaneProperties cpProperties;
-
-    @Autowired
-    AgentProperties agentProperties;
-
-    @Autowired
-    RuntimeProperties runtimeProperties;
-
-    @Autowired
-    private AWSProperties awsProperties;
 
     @Autowired
     private StsClient stsClient;
@@ -43,7 +32,7 @@ public class SDKConfigManager {
      * @return The configured SDK configuration.
      */
     @Bean
-    public SdkConfig sdkConfig() {
+    public SdkConfig sdkConfig(ControlPlaneProperties cpProperties, AgentProperties agentProperties, RuntimeProperties runtimeProperties, AWSProperties awsProperties) {
         TlsConfig tlsConfig = new TlsConfig
                 .Builder(cpProperties.getTrustStorePath(), cpProperties.getTrustStoreType())
                 .truststorePassword(cpProperties.getTrustStorePassword())

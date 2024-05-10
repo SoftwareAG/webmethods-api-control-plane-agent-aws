@@ -18,6 +18,9 @@ import java.util.Set;
  * API Model converter to convert AWS API Gateway model to Agent SDK API model
  */
 public class APIModelConverter {
+    private APIModelConverter() {
+
+    }
 
     /**
      * Converts the provided parameters into an Agent SDK API model.

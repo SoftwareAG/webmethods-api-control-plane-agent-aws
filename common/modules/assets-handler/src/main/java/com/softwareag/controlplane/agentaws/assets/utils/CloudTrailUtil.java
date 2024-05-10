@@ -9,6 +9,11 @@ import java.util.List;
  * Utility class for CloudTrail
  */
 public class CloudTrailUtil {
+
+    private CloudTrailUtil() {
+
+    }
+
     /**
      * Retrieves a list of API create event names under which it is recorded in AWS CloudTrail.
      *
@@ -42,7 +47,6 @@ public class CloudTrailUtil {
     public static List<String> getApiDeleteEvents() {
         List<String> apiEvents = new ArrayList<>();
         apiEvents.add(Constants.DELETE_STAGE_EVENT);
-//        apiEvents.add(Constants.DELETE_REST_API_EVENT);
         return apiEvents;
     }
 }

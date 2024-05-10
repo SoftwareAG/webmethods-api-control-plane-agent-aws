@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
-public class HeartbeatManagerImplTest {
+class HeartbeatManagerImplTest {
     @Mock
     ApiGatewayClient apiGatewayClient;
 
@@ -72,20 +72,20 @@ public class HeartbeatManagerImplTest {
 
     //Verify a stage is active if it is present in atleast one api
     @Test
-    public void getActiveHeartbeatIfStageIsPresent() {
+    void getActiveHeartbeatIfStageIsPresent() {
         when(stage.stageName()).thenReturn(stage_name);
 
         Heartbeat heartbeat = heartbeatManager.getHeartBeat(runtime_id, stage_name);
-        assertEquals(heartbeat.getActive(), 1);
+        assertEquals(1, heartbeat.getActive());
     }
 
     //Verify a stage is inactive if it is not present in any of the apis
     @Test
-    public void getInactiveHeartbeatIfStageIsNotPresent() {
+    void getInactiveHeartbeatIfStageIsNotPresent() {
         when(stage.stageName()).thenReturn("qa");
 
         Heartbeat heartbeat = heartbeatManager.getHeartBeat(runtime_id, stage_name);
-        assertEquals(heartbeat.getActive(), 0);
+        assertEquals(0, heartbeat.getActive());
     }
 
 }

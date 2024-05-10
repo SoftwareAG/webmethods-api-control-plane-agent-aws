@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EnvProvider {
+    private EnvProvider(){
+
+    }
+
     private static final Map<String, String> DEFAULT_VALUES = new HashMap<>();
 
     static {

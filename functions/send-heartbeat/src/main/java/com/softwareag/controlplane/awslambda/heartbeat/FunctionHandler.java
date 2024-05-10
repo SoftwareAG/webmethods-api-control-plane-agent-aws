@@ -125,7 +125,7 @@ public class FunctionHandler {
         if(ObjectUtils.isNotEmpty(lastHeartbeatSyncTime)) {
             Long currentTime = System.currentTimeMillis();
             // If currentTime - interval is far greater than the lastHeartbeatSyncTime, we send inactive heartbeats for the missed intervals.
-            if(lastHeartbeatSyncTime < (currentTime - Long.parseLong(EnvProvider.getEnv(Constants.APICP_HEARTBEAT_SEND_INTERVAL))*2))
+            if(lastHeartbeatSyncTime != null && lastHeartbeatSyncTime < (currentTime - Long.parseLong(EnvProvider.getEnv(Constants.APICP_HEARTBEAT_SEND_INTERVAL))*2))
                 sendMissingHeartbeats(lastHeartbeatSyncTime, currentTime);
         }
     }

@@ -95,31 +95,37 @@ public class AssetsManagerImpl implements AssetsManager {
     public List<AssetSyncAction<Asset>> getModifiedRestAPIs(String stage, Long assetSyncTime, int bufferTime) {
         List<AssetSyncAction<Asset>> assetSyncActions = new ArrayList<>();
         Map<String, Map<String, String>> modifiedApis = cloudTrailManager.getModifiedAPIs(assetSyncTime, bufferTime);
-        for (String operation : modifiedApis.keySet()) {
-            Map<String, String> apis = modifiedApis.get(operation);
-            for (String restApiID : apis.keySet()) {
-                if (Constants.DELETE.equals(operation)) {
-                    assetSyncActions.addAll(getDeleteSyncActions(restApiID, assetSyncTime, null));
-                }
-                else {
-                    GetRestApiRequest restApiRequest = GetRestApiRequest.builder().restApiId(restApiID).build();
-                    GetRestApiResponse restApiResponse = apiGatewayClient.getRestApi(restApiRequest);
-                    GetStagesRequest stagesRequest = GetStagesRequest.builder().restApiId(restApiID).build();
-                    GetStagesResponse stagesResponse = apiGatewayClient.getStages(stagesRequest);
-                    List<Stage> stages = stagesResponse.item();
-                    API api = getAPIFromStage(stage, stages, restApiID, restApiResponse.tags(), apis.get(restApiID));
-                    if (api != null) {
-                        if(Constants.CREATE.equals(operation)) {
-                            //delete previous deployment
-                            assetSyncActions.addAll(getDeleteSyncActions(restApiID, assetSyncTime, api.getVersion()));
-                        }
-                        assetSyncActions.add((AssetSyncAction) new APISyncAction(AssetType.API,
-                                AssetSyncAction.SyncType.valueOf(operation), api, assetSyncTime));
+        for (Map.Entry<String, Map<String, String>> entry: modifiedApis.entrySet()) {
+            String operation = entry.getKey();
+            Map<String, String> apis = entry.getValue();
+            addAssetSyncActions(apis, operation, stage, assetSyncTime, assetSyncActions);
+        }
+        return assetSyncActions;
+    }
+
+    private void addAssetSyncActions(Map<String, String> apis, String operation, String stage, Long assetSyncTime, List<AssetSyncAction<Asset>> assetSyncActions) {
+        for (Map.Entry<String, String> entry : apis.entrySet()) {
+            String restApiID = entry.getValue();
+            if (Constants.DELETE.equals(operation)) {
+                assetSyncActions.addAll(getDeleteSyncActions(restApiID, assetSyncTime, null));
+            }
+            else {
+                GetRestApiRequest restApiRequest = GetRestApiRequest.builder().restApiId(restApiID).build();
+                GetRestApiResponse restApiResponse = apiGatewayClient.getRestApi(restApiRequest);
+                GetStagesRequest stagesRequest = GetStagesRequest.builder().restApiId(restApiID).build();
+                GetStagesResponse stagesResponse = apiGatewayClient.getStages(stagesRequest);
+                List<Stage> stages = stagesResponse.item();
+                API api = getAPIFromStage(stage, stages, restApiID, restApiResponse.tags(), apis.get(restApiID));
+                if (api != null) {
+                    if(Constants.CREATE.equals(operation)) {
+                        //delete previous deployment
+                        assetSyncActions.addAll(getDeleteSyncActions(restApiID, assetSyncTime, api.getVersion()));
                     }
+                    assetSyncActions.add((AssetSyncAction) new APISyncAction(AssetType.API,
+                            AssetSyncAction.SyncType.valueOf(operation), api, assetSyncTime));
                 }
             }
         }
-        return assetSyncActions;
     }
 
     /**

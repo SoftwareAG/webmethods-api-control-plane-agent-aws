@@ -39,7 +39,13 @@ public class MetricsManagerImpl implements MetricsManager {
     private CloudWatchClient cloudWatchClient;
     
     private AssetsManager assetsManager;
-    
+
+    private MetricDataResult countResults;
+    private MetricDataResult latencyResults;
+    private MetricDataResult integrationLatencyResults;
+    private MetricDataResult clientErrorResults;
+    private MetricDataResult serverErrorResults;
+
     private MetricsManagerImpl(String region, String stage, String getMetricsByData) {
         this.stage = stage;
         this.getMetricsByData = getMetricsByData;
@@ -132,39 +138,45 @@ public class MetricsManagerImpl implements MetricsManager {
 
         List<Dimension> dimensions = CloudWatchUtil.createDimensions(stage, api.getName());
         List<MetricDataResult> metricDataResults = getResultsByMetricData(startTime, endTime, dimensions, interval);
-        MetricDataResult countResults = null;
-        MetricDataResult latencyResults = null;
-        MetricDataResult integrationLatencyResults = null;
-        MetricDataResult clientErrorResults = null;
-        MetricDataResult serverErrorResults = null;
 
         for (MetricDataResult metricDataResult : metricDataResults) {
-            if (Constants.AWS_METRIC_COUNT_ID.equals(metricDataResult.id())) {
-                countResults = metricDataResult;
-            } else if (Constants.AWS_METRIC_LATENCY_ID.equals(metricDataResult.id())) {
-                latencyResults = metricDataResult;
-            } else if (Constants.AWS_METRIC_INTEGRATION_LATENCY_ID.equals(metricDataResult.id())) {
-                integrationLatencyResults = metricDataResult;
-            } else if (Constants.AWS_METRIC_CLIENT_ERROR_ID.equals(metricDataResult.id())) {
-                clientErrorResults = metricDataResult;
-            } else {
-                serverErrorResults = metricDataResult;
-            }
+            updateDataMetrics(metricDataResult);
         }
 
         if(countResults != null) {
             for (int i = 0; i < countResults.values().size(); i++) {
                 Double count = countResults.values().get(i);
-                Double latency = latencyResults.values().size() > i ? latencyResults.values().get(i) : 0;
-                Double integrationLatency = integrationLatencyResults.values().size() > i ? integrationLatencyResults.values().get(i) : 0;
-                Double averageLatency = latency - integrationLatency > 0 ? latency - integrationLatency : 0;
-                Double clientError = clientErrorResults.values().size() > i ? clientErrorResults.values().get(i) : 0;
-                Double serverError = serverErrorResults.values().size() > i ? serverErrorResults.values().get(i) : 0;
+                Double latency = getMetricValue(latencyResults, i);
+                Double integrationLatency = getMetricValue(integrationLatencyResults, i);
+                Double averageLatency = Math.max(latency - integrationLatency, 0);
+                Double clientError = getMetricValue(clientErrorResults, i);
+                Double serverError = getMetricValue(serverErrorResults, i);
                 APITransactionMetrics apiTransactionMetrics = MetricsModelConverter.createAPITransactionMetrics(api, count, latency, averageLatency, integrationLatency, clientError, serverError);
                 Instant timeStamp = countResults.timestamps().get(i);
                 updateMetricsMap(metricsMap, apiTransactionMetrics, timeStamp);
             }
         }
+    }
+
+    private void updateDataMetrics(MetricDataResult metricDataResult) {
+        if (metricDataResult == null)
+            return;
+
+        if (Constants.AWS_METRIC_COUNT_ID.equals(metricDataResult.id())) {
+            countResults = metricDataResult;
+        } else if (Constants.AWS_METRIC_LATENCY_ID.equals(metricDataResult.id())) {
+            latencyResults = metricDataResult;
+        } else if (Constants.AWS_METRIC_INTEGRATION_LATENCY_ID.equals(metricDataResult.id())) {
+            integrationLatencyResults = metricDataResult;
+        } else if (Constants.AWS_METRIC_CLIENT_ERROR_ID.equals(metricDataResult.id())) {
+            clientErrorResults = metricDataResult;
+        } else {
+            serverErrorResults = metricDataResult;
+        }
+    }
+
+    private Double getMetricValue(MetricDataResult metricDataResult, int index) {
+        return metricDataResult != null && metricDataResult.values().size() > index ? metricDataResult.values().get(index) : 0;
     }
 
     /**
