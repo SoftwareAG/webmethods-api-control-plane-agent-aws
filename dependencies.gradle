@@ -6,6 +6,26 @@ ext {
     nettyCodecVersion = '4.1.100.Final'
     nettyHandlerVersion = '4.1.101.Final'
     springVersion = '6.0.14'
+    junitPlatformVersion = '1.9.3'
+    junitJupiterVersion = '5.9.3'
+    junitMockitoVersion = '5.3.1'
+    bytebuddyVersion = '1.14.6'
+
+    junitDependencies = [
+            "org.junit.platform:junit-platform-commons:${junitPlatformVersion}",
+            "org.junit.platform:junit-platform-engine:${junitPlatformVersion}",
+            "org.opentest4j:opentest4j:1.2.0",
+
+            "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}",
+            "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}",
+            "org.mockito:mockito-junit-jupiter:${junitMockitoVersion}",
+            "org.mockito:mockito-core:${junitMockitoVersion}",
+
+            "net.bytebuddy:byte-buddy:${bytebuddyVersion}",
+            "net.bytebuddy:byte-buddy-agent:${bytebuddyVersion}",
+
+            "commons-logging:commons-logging:1.2"
+    ]
 
     agentSdkDependencies = [
             //jackson
@@ -69,5 +89,3 @@ ext {
     ]
 
 }
-
-
