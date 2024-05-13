@@ -24,7 +24,7 @@ ext {
             "net.bytebuddy:byte-buddy:${bytebuddyVersion}",
             "net.bytebuddy:byte-buddy-agent:${bytebuddyVersion}",
 
-            "org.apache.commons:commons-logging:1.2.0"
+            "commons-logging:commons-logging:1.2"
     ]
 
     agentSdkDependencies = [
