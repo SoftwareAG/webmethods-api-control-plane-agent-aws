@@ -2,44 +2,31 @@ package com.softwareag.controlplane.awslambda.heartbeat;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.logging.LogLevel;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.softwareag.controlplane.agentaws.auth.AWSCredentialsProvider;
-import com.softwareag.controlplane.agentaws.util.constants.Constants;
-import com.softwareag.controlplane.agentaws.util.provider.EnvProvider;
+import com.softwareag.controlplane.awslambda.util.Utils;
+import com.softwareag.controlplane.awslambda.util.constants.Constants;
+import com.softwareag.controlplane.awslambda.util.provider.EnvProvider;
 import com.softwareag.controlplane.agentsdk.api.client.ControlPlaneClient;
 import com.softwareag.controlplane.agentsdk.api.client.SdkClientException;
 import com.softwareag.controlplane.agentsdk.api.client.http.SdkHttpClient;
-import com.softwareag.controlplane.agentsdk.api.config.AuthConfig;
 import com.softwareag.controlplane.agentsdk.api.config.ControlPlaneConfig;
-import com.softwareag.controlplane.agentsdk.api.config.HttpConnectionConfig;
 import com.softwareag.controlplane.agentsdk.api.config.RuntimeConfig;
 import com.softwareag.controlplane.agentsdk.api.config.SdkConfig;
-import com.softwareag.controlplane.agentsdk.core.client.DefaultHttpClient;
-import com.softwareag.controlplane.agentsdk.core.client.RestControlPlaneClient;
 import com.softwareag.controlplane.agentsdk.core.handler.RuntimeRegistrationHandler;
 import com.softwareag.controlplane.agentsdk.core.handler.SendHeartbeatHandler;
 import com.softwareag.controlplane.agentsdk.core.log.DefaultAgentLogger;
-import com.softwareag.controlplane.agentsdk.core.model.RuntimeReregistrationReport;
-import com.softwareag.controlplane.agentsdk.model.Capacity;
 import com.softwareag.controlplane.agentsdk.model.Heartbeat;
-import com.softwareag.controlplane.agentsdk.model.Runtime;
 import com.softwareag.controlplane.awslambda.heartbeat.retriever.HeartbeatRetrieverImpl;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.logging.log4j.Level;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.sts.StsClient;
-import software.amazon.awssdk.services.sts.model.GetCallerIdentityRequest;
-import software.amazon.awssdk.services.sts.model.GetCallerIdentityResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 /**
  * @author CLEP
+ *
+ * This FunctionHandler class serves the Heartbeat send action for the AWS Lambda function.
+ * This class contains the method that will be invoked by AWS Lambda.
  */
 @SuppressWarnings("unused")
 public class FunctionHandler {
@@ -50,13 +37,23 @@ public class FunctionHandler {
     private SdkConfig sdkConfig;
     private DefaultAgentLogger logger;
 
+    /**
+     * Initializes Configurations for the FunctionHandler.
+     *
+     * @throws SdkClientException if there is an error in the AWS SDK client.
+     * @throws IOException if an I/O error occurs during initialization.
+     */
     public FunctionHandler() throws SdkClientException, IOException {
         init();
     }
 
+    /**
+     * This handleEvent method is the entry point for the AWS Lambda function.
+     * @param context The context object provides information about the invocation, function, and execution environment.
+     */
     public void handleEvent(Context context) {
         context.getLogger().log("Started handler invocation", LogLevel.TRACE);
-        if(isControlplaneActive())
+        if(Utils.isControlplaneActive(controlPlaneClient))
             this.sendHeartbeatHandler.handle();
         else
             context.getLogger().log("Controlplane is not available", LogLevel.TRACE);
@@ -64,47 +61,12 @@ public class FunctionHandler {
     }
 
     private void init() throws SdkClientException, IOException {
-        ControlPlaneConfig controlPlaneConfig = new ControlPlaneConfig.Builder()
-                .url(EnvProvider.getEnv(Constants.APICP_CONTROLPLANE_URL))
-                .authConfig(new AuthConfig.Builder(EnvProvider.getEnv(Constants.APICP_CONTROLPLANE_USERNAME),
-                        EnvProvider.getEnv(Constants.APICP_CONTROLPLANE_PASSWORD)).build())
-                .build();
-
-        SdkHttpClient httpClient = new DefaultHttpClient.Builder()
-                .connectionConfig(new HttpConnectionConfig.Builder().build())
-                .build();
-
-        this.controlPlaneClient = new RestControlPlaneClient.Builder()
-                .controlPlaneConfig(controlPlaneConfig)
-                .httpClient(httpClient)
-                .build();
-
-        Capacity capacity = new Capacity();
-        capacity.setUnit(Capacity.TimeUnit.valueOf(EnvProvider.getEnv(Constants.APICP_RUNTIME_CAPACITY_UNIT)));
-        capacity.setValue(Long.parseLong(EnvProvider.getEnv(Constants.APICP_RUNTIME_CAPACITY)));
-
-        String runtimeId = getAccountID().concat("-")
-                .concat(EnvProvider.getEnv(Constants.AWS_REGION))
-                .concat("-")
-                .concat(EnvProvider.getEnv(Constants.AWS_STAGE));
-
-        String runtimeHost = String.format("https://%s.console.aws.amazon.com/apigateway", System.getenv(Constants.AWS_REGION));
-
-        this.runtimeConfig = new RuntimeConfig.Builder(runtimeId, System.getenv(Constants.APICP_RUNTIME_NAME),
-                    System.getenv(Constants.APICP_RUNTIME_TYPE_ID), Runtime.DeploymentType.PUBLIC_CLOUD)
-                .description(System.getenv(Constants.APICP_RUNTIME_DESCRIPTION))
-                .region(System.getenv(Constants.APICP_RUNTIME_REGION))
-                .location(System.getenv(Constants.APICP_RUNTIME_LOCATION))
-                .capacity(capacity)
-                .tags(getRuntimeTagsFromEnv())
-                .host(runtimeHost)
-                .build();
-
-        this.sdkConfig = new SdkConfig.Builder(controlPlaneConfig, this.runtimeConfig)
-                .heartbeatInterval(Integer.parseInt(EnvProvider.getEnv(Constants.APICP_HEARTBEAT_SEND_INTERVAL)))
-                .logLevel(Level.ALL)
-                .build();
-
+        // Setup necessary configurations.
+        ControlPlaneConfig controlPlaneConfig = Utils.getControlplaneConfig();
+        SdkHttpClient httpClient = Utils.getHttpClient();
+        runtimeConfig = Utils.getRuntimeConfig();
+        this.controlPlaneClient = Utils.getControlplaneClient(controlPlaneConfig,runtimeConfig,httpClient);
+        sdkConfig = Utils.getSDKConfig(controlPlaneConfig,runtimeConfig);
         this.logger = DefaultAgentLogger.getInstance(getClass());
 
         this.sendHeartbeatHandler = new SendHeartbeatHandler.Builder(
@@ -113,41 +75,16 @@ public class FunctionHandler {
                 .build();
 
         // Runtime registration
-        RuntimeRegistrationHandler registrationHandler = new RuntimeRegistrationHandler.Builder(
-                controlPlaneClient,
-                this.sdkConfig.getRuntimeConfig(),
-                this.sdkConfig.getHeartbeatInterval())
-                .build();
-
+        RuntimeRegistrationHandler registrationHandler = Utils.getRuntimeRegistrationHandler(controlPlaneClient, sdkConfig);
         Object response = registrationHandler.handle();
 
-        Long lastHeartbeatSyncTime = getLastHeartbeatSyncTime(response);
+        Long lastHeartbeatSyncTime = Utils.getLastActionSyncTime(response, Constants.SEND_HEARTBEAT_ACTION);
         if(ObjectUtils.isNotEmpty(lastHeartbeatSyncTime)) {
             Long currentTime = System.currentTimeMillis();
             // If currentTime - interval is far greater than the lastHeartbeatSyncTime, we send inactive heartbeats for the missed intervals.
-            if(lastHeartbeatSyncTime < (currentTime - Long.parseLong(EnvProvider.getEnv(Constants.APICP_HEARTBEAT_SEND_INTERVAL))*2))
+            if(lastHeartbeatSyncTime < (currentTime - Long.parseLong(EnvProvider.getEnv(Constants.APICP_HEARTBEAT_SEND_INTERVAL_SECONDS))*2))
                 sendMissingHeartbeats(lastHeartbeatSyncTime, currentTime);
         }
-    }
-
-    public String getAccountID() {
-        StsClient stsClient = StsClient.builder()
-                .region(Region.of(EnvProvider.getEnv(Constants.AWS_REGION)))
-                .credentialsProvider(AWSCredentialsProvider.getCredentialsProvider())
-                .build();
-
-        GetCallerIdentityRequest getCallerIdentityRequest = GetCallerIdentityRequest.builder().build();
-        GetCallerIdentityResponse getCallerIdentityResponse = stsClient.getCallerIdentity(getCallerIdentityRequest);
-        return getCallerIdentityResponse.account();
-    }
-
-    private Long getLastHeartbeatSyncTime(Object object) throws IOException {
-        if (object instanceof String response) {
-            ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            RuntimeReregistrationReport reregistrationReport = mapper.readValue(response, RuntimeReregistrationReport.class);
-            return reregistrationReport.getLastHeartbeatTime();
-        }
-        return null;
     }
 
     private void sendMissingHeartbeats(Long lastSyncTime, Long currentTime) {
@@ -173,20 +110,5 @@ public class FunctionHandler {
             currentTime += (syncInterval*1000);
         }
         return heartbeats;
-    }
-
-    private boolean isControlplaneActive() {
-        try {
-            this.controlPlaneClient.checkHealth();
-        } catch (SdkClientException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private HashSet<String> getRuntimeTagsFromEnv() {
-        String runtimeTagsEnv = EnvProvider.getEnv(Constants.APICP_RUNTIME_TAGS);
-        String[] substrings = runtimeTagsEnv.split(",");
-        return new HashSet<>(Arrays.asList(substrings));
     }
 }

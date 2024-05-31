@@ -6,12 +6,20 @@ ext {
     nettyCodecVersion = '4.1.100.Final'
     nettyHandlerVersion = '4.1.101.Final'
     springVersion = '6.0.14'
+    springBootVersion = '3.1.3'
+    springSecurityVersion = '6.1.3'
     junitPlatformVersion = '1.9.3'
     junitJupiterVersion = '5.9.3'
     junitMockitoVersion = '5.3.1'
     bytebuddyVersion = '1.14.6'
+    apacheCommonsLang3Version = '3.12.0'
+    apacheLog4jTemplateVersion = '2.20.0'
+    awsAuthVersion = '2.17.267'
+    awsSdkVersion = '2.23.18'
+    tomcatVersion = '10.1.16'
+    elasticsearchVersion = '7.17.15'
 
-    junitDependencies = [
+    junit = [
             "org.junit.platform:junit-platform-commons:${junitPlatformVersion}",
             "org.junit.platform:junit-platform-engine:${junitPlatformVersion}",
             "org.opentest4j:opentest4j:1.2.0",
@@ -24,11 +32,96 @@ ext {
             "net.bytebuddy:byte-buddy:${bytebuddyVersion}",
             "net.bytebuddy:byte-buddy-agent:${bytebuddyVersion}",
 
-            "commons-logging:commons-logging:1.2"
+            "commons-logging:commons-logging:1.2",
+            'org.apiguardian:apiguardian-api:1.0.0'
     ]
 
-    agentSdkDependencies = [
-            //jackson
+    apache = [
+            "org.apache.commons:commons-lang3:$apacheCommonsLang3Version",
+            'commons-codec:commons-codec:1.11',
+            "org.apache.logging.log4j:log4j-layout-template-json:$apacheLog4jTemplateVersion",
+    ]
+
+    json = [
+            'org.json:json:20231013'
+    ]
+
+    awsApiGateway = [
+            "software.amazon.awssdk:apigateway:$awsSdkVersion",
+    ]
+
+    awsCloudWatch= [
+            "software.amazon.awssdk:cloudwatch:$awsSdkVersion"
+    ]
+
+    awsCloudTrail = [
+            "software.amazon.awssdk:cloudtrail:$awsSdkVersion",
+    ]
+
+    awsTestDependencies = [
+
+    ]
+
+    awsSts = [
+            "software.amazon.awssdk:sts:$awsSdkVersion",
+    ]
+
+    awsS3 = [
+            "software.amazon.awssdk:s3:$awsSdkVersion",
+    ]
+
+    awsQueryProtocol = [
+            "software.amazon.awssdk:aws-query-protocol:2.22.0"
+    ]
+
+    jakartaJavax = [
+            'jakarta.validation:jakarta.validation-api:3.0.2',
+            'jakarta.el:jakarta.el-api:5.0.1',
+            'javax.el:javax.el-api:2.2.4',
+            'org.glassfish.web:javax.el:2.2.4',
+    ]
+
+    springBoot = [
+            "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter:$springBootVersion",
+            "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-logging:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-json:$springBootVersion",
+            "org.springframework.boot:spring-boot-actuator-autoconfigure:$springBootVersion",
+            "org.springframework.boot:spring-boot-actuator:$springBootVersion",
+            "org.springframework.boot:spring-boot:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion",
+            "org.springframework.session:spring-session-core:3.0.1",
+            "org.springframework.boot:spring-boot-starter-data-elasticsearch:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-validation:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-security:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-reactor-netty:$springBootVersion",
+    ]
+
+    spring = [
+            "org.springframework:spring-core:$springVersion",
+            "org.springframework:spring-jcl:$springVersion",
+            "org.springframework:spring-context:$springVersion",
+            "org.springframework:spring-aop:$springVersion",
+            "org.springframework:spring-beans:$springVersion",
+            "org.springframework:spring-expression:$springVersion",
+            "org.springframework:spring-web:$springVersion",
+            "org.springframework:spring-webmvc:$springVersion",
+            "org.springframework:spring-webflux:$springVersion",
+            "org.springframework:spring-tx:$springVersion",
+    ]
+
+    springBootStarterTest = [
+            "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    ]
+
+    springBootAnnotationProcessor = [
+            "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
+    ]
+
+    jackson = [
             "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
             "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
             "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
@@ -42,22 +135,22 @@ ext {
             "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:${jacksonVersion}",
             "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}",
             "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:${jacksonVersion}",
+    ]
 
-            //apache
-            'commons-codec:commons-codec:1.11',
-
-            //log4j
+    log4j = [
             "org.slf4j:slf4j-api:2.0.9",
             "org.apache.logging.log4j:log4j-core:$log4jVersion",
             "org.apache.logging.log4j:log4j-api:$log4jVersion",
             "org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion",
+    ]
 
-            //micrometer
+    micrometer = [
             "io.micrometer:micrometer-core:$micrometerVersion",
             "io.micrometer:micrometer-commons:$micrometerVersion",
             "io.micrometer:micrometer-observation:$micrometerVersion",
+    ]
 
-            //netty
+    netty = [
             "io.netty:netty-codec-http:$nettyVersion",
             "io.netty:netty-common:$nettyVersion",
             "io.netty:netty-buffer:$nettyVersion",
@@ -75,17 +168,82 @@ ext {
             "io.netty:netty-transport-classes-epoll:$nettyVersion",
             "io.netty:netty-handler-proxy:$nettyVersion",
             "io.netty:netty-codec-socks:$nettyVersion",
+    ]
 
-            //reactor
+    reactor = [
             "io.projectreactor.netty:reactor-netty:1.0.33",
             "io.projectreactor:reactor-core:3.5.9",
             "org.reactivestreams:reactive-streams:1.0.4",
             "io.projectreactor.netty:reactor-netty-http:1.1.13",
             "io.projectreactor.netty:reactor-netty-core:1.1.10",
+    ]
 
-            //spring
-            "org.springframework:spring-webflux:$springVersion",
-            "org.springframework:spring-web:$springVersion",
+    lambdaFunctions = [
+            'com.amazonaws:aws-lambda-java-log4j2:1.6.0',
+            'com.amazonaws:aws-lambda-java-events:3.11.3',
+            'com.amazonaws:aws-lambda-java-core:1.2.3',
+            "org.springframework.boot:spring-boot-starter-validation:$springBootVersion",
+            "org.springframework:spring-core:$springVersion",
+            "org.springframework:spring-context:$springVersion",
+            "org.springframework:spring-beans:$springVersion",
+            "org.apache.commons:commons-lang3:$apacheCommonsLang3Version",
+            "org.apache.logging.log4j:log4j-layout-template-json:$apacheLog4jTemplateVersion",
+            awsApiGateway,
+            awsCloudWatch,
+            awsCloudTrail,
+            awsSts,
+            json,
+    ]
+
+    springBootApplication = [
+            spring,
+            springBoot,
+            apache,
+            json,
+            awsApiGateway,
+            awsCloudTrail,
+            awsCloudWatch,
+            awsSts,
+    ]
+
+    agentSdk = [
+            jakartaJavax,
+            jackson,
+            apache,
+            log4j,
+            micrometer,
+            netty,
+            reactor,
+            spring,
+    ]
+
+    commonAuth = [
+            "software.amazon.awssdk:auth:$awsAuthVersion",
+            "software.amazon.awssdk:utils:$awsAuthVersion"
+    ]
+
+    commonAssetsHandler = [
+            awsApiGateway,
+            awsCloudTrail,
+            json
+    ]
+
+    commonHeartbeatHandler = [
+            awsApiGateway,
+            json
+    ]
+
+    commonMetricsHandler = [
+            awsApiGateway,
+            awsCloudTrail,
+            awsCloudWatch,
+            json
+    ]
+
+    transitiveDependencies = [
+
     ]
 
 }
+
+

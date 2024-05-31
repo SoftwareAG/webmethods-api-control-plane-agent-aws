@@ -1,36 +1,25 @@
 package com.softwareag.controlplane.awslambda.heartbeat.retriever;
 
-import com.softwareag.controlplane.agentaws.auth.AWSCredentialsProvider;
 import com.softwareag.controlplane.agentaws.heartbeat.manager.impl.HeartbeatManagerImpl;
-import com.softwareag.controlplane.agentaws.util.constants.Constants;
-import com.softwareag.controlplane.agentaws.util.provider.EnvProvider;
+import com.softwareag.controlplane.awslambda.util.Utils;
+import com.softwareag.controlplane.awslambda.util.constants.Constants;
+import com.softwareag.controlplane.awslambda.util.provider.EnvProvider;
 import com.softwareag.controlplane.agentsdk.core.handler.SendHeartbeatHandler;
 import com.softwareag.controlplane.agentsdk.model.Heartbeat;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.sts.StsClient;
-import software.amazon.awssdk.services.sts.model.GetCallerIdentityRequest;
-import software.amazon.awssdk.services.sts.model.GetCallerIdentityResponse;
 
-public class HeartbeatRetrieverImpl implements SendHeartbeatHandler.HeartbeatRetriever {
+/**
+ * Implementation of the HeartbeatRetriever interface for retrieving Heartbeat.
+ * This implementation is intended to be used with the SendHeartbeatHandler class.
+ */
+public final class HeartbeatRetrieverImpl implements SendHeartbeatHandler.HeartbeatRetriever {
+    /**
+     * Retrieves Heartbeat from the API runtime.
+     *
+     * @return {@link Heartbeat}
+     */
     @Override
     public Heartbeat getHeartbeat() {
-        String runtimeId = getAccountID().concat("-")
-                .concat(EnvProvider.getEnv("AWS_REGION"))
-                .concat("-")
-                .concat(EnvProvider.getEnv("AWS_STAGE"));
-
         return HeartbeatManagerImpl.getInstance(EnvProvider.getEnv(Constants.AWS_REGION))
-                .getHeartBeat(runtimeId, EnvProvider.getEnv(Constants.AWS_STAGE));
-    }
-
-    public String getAccountID() {
-        StsClient stsClient = StsClient.builder()
-                .region(Region.of(EnvProvider.getEnv(Constants.AWS_REGION)))
-                .credentialsProvider(AWSCredentialsProvider.getCredentialsProvider())
-                .build();
-
-        GetCallerIdentityRequest getCallerIdentityRequest = GetCallerIdentityRequest.builder().build();
-        GetCallerIdentityResponse getCallerIdentityResponse = stsClient.getCallerIdentity(getCallerIdentityRequest);
-        return getCallerIdentityResponse.account();
+                .getHeartBeat(Utils.getRuntimeId(), EnvProvider.getEnv(Constants.AWS_STAGE));
     }
 }

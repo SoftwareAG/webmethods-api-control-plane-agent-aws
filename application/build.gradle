@@ -23,7 +23,7 @@ java {
 }
 
 repositories {
-    mavenCentral()
+
 }
 
 configurations {
@@ -34,59 +34,16 @@ configurations {
 
 dependencies {
     implementation fileTree(dir: '../libs', include: '*.jar')
-    implementation rootProject.agentSdkDependencies
 
     implementation project(':common:modules:assets-handler')
     implementation project(':common:modules:metrics-handler')
     implementation project(':common:modules:heartbeat-handler')
     implementation project(':common:modules:auth')
-    implementation 'org.json:json:20231013'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'software.amazon.awssdk:apigateway:2.23.18'
-    implementation 'software.amazon.awssdk:cloudwatch:2.23.18'
-    implementation 'software.amazon.awssdk:cloudtrail:2.23.18'
-    implementation 'software.amazon.awssdk:sts:2.23.18'
-    implementation 'software.amazon.awssdk:s3:2.23.18'
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-    implementation 'jakarta.el:jakarta.el-api:5.0.1'
-    implementation 'javax.el:javax.el-api:2.2.4'
-    implementation 'org.glassfish.web:javax.el:2.2.4'
 
-    implementation(
-            //springframework - boot
-            "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter:$springBootVersion",
-            "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-logging:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-json:$springBootVersion",
-            "org.springframework.boot:spring-boot-actuator-autoconfigure:$springBootVersion",
-            "org.springframework.boot:spring-boot-actuator:$springBootVersion",
-            "org.springframework.boot:spring-boot:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion",
-            "org.springframework.session:spring-session-core:3.0.1",
-            "org.springframework.boot:spring-boot-starter-data-elasticsearch:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-validation:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-security:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion",
-            "org.springframework.boot:spring-boot-starter-reactor-netty:$springBootVersion",
-
-            //springframework
-            "org.springframework:spring-core:$springFrameworkVersion",
-            "org.springframework:spring-jcl:$springFrameworkVersion",
-            "org.springframework:spring-context:$springFrameworkVersion",
-            "org.springframework:spring-aop:$springFrameworkVersion",
-            "org.springframework:spring-beans:$springFrameworkVersion",
-            "org.springframework:spring-expression:$springFrameworkVersion",
-            "org.springframework:spring-web:$springFrameworkVersion",
-            "org.springframework:spring-webmvc:$springFrameworkVersion",
-            "org.springframework:spring-webflux:$springFrameworkVersion",
-            "org.springframework:spring-tx:$springFrameworkVersion",
-    )
-
-    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
+    implementation rootProject.agentSdk
+    implementation rootProject.springBootApplication
+    testImplementation rootProject.springBootStarterTest
+    annotationProcessor rootProject.springBootAnnotationProcessor
 }
 
 tasks.named('bootJar') {

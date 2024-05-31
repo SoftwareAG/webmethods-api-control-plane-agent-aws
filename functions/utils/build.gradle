@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'com.softwareag.controlplane.agentaws'
+version '10.15.0-v0002'
+
+repositories {
+
+}
+
+apply from: '../../settings/jacoco.gradle'
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}

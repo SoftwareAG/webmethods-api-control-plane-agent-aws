@@ -5,7 +5,7 @@ import java.time.Instant;
 /**
  * Utility functions that can used across different functions
  */
-public class Utility {
+public final class Utility {
     private Utility(){
 
     }

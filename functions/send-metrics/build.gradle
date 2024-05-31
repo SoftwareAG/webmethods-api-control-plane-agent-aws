@@ -7,7 +7,11 @@ plugins {
 apply plugin: 'java'
 
 repositories {
-    mavenCentral()
+
+}
+
+dependencies {
+    implementation project(':functions:utils')
 }
 
 configurations.implementation.setCanBeResolved(true)

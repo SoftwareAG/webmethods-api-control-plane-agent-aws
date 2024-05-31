@@ -6,12 +6,12 @@ dependencies {
     api project(':common:modules:auth')
 
     implementation fileTree(dir: '../../../libs', include: '*.jar')
-    implementation rootProject.agentSdkDependencies
 
-    implementation 'software.amazon.awssdk:apigateway:2.23.18'
-    implementation 'org.json:json:20231013'
+    implementation rootProject.agentSdk
+    implementation rootProject.commonHeartbeatHandler
 
-    testImplementation rootProject.junitDependencies
+    testImplementation rootProject.junit
+    testImplementation rootProject.awsTestDependencies
 }
 
 test {
