@@ -4,18 +4,16 @@ plugins {
 
 dependencies {
     api project(':common:modules:auth')
+    implementation project(':common:modules:assets-handler')
 
     implementation fileTree(dir: '../../../libs', include: '*.jar')
-    implementation rootProject.agentSdkDependencies
 
-    implementation 'software.amazon.awssdk:apigateway:2.23.18'
-    implementation 'software.amazon.awssdk:cloudwatch:2.23.18'
-    implementation 'software.amazon.awssdk:cloudtrail:2.23.18'
-    implementation project(':common:modules:assets-handler')
-    implementation 'org.json:json:20231013'
+    implementation rootProject.agentSdk
+    implementation rootProject.commonMetricsHandler
 
-    testImplementation rootProject.junitDependencies
-    testImplementation "software.amazon.awssdk:aws-query-protocol:2.22.0"
+    testImplementation rootProject.junit
+    testImplementation rootProject.awsQueryProtocol
+    testImplementation rootProject.awsTestDependencies
 }
 
 test {

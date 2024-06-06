@@ -4,7 +4,11 @@ plugins {
 apply plugin: 'java'
 
 repositories {
-    mavenCentral()
+
+}
+
+dependencies {
+    implementation project(':functions:utils')
 }
 
 configurations.implementation.setCanBeResolved(true)
@@ -37,7 +41,7 @@ task buildZip(type: Zip) {
 }
 
 buildFatJar.dependsOn ':common:modules:auth:jar'
-buildFatJar.dependsOn ':common:modules:utils:jar'
+buildFatJar.dependsOn ':functions:utils:jar'
 buildFatJar.dependsOn ':common:modules:assets-handler:jar'
 buildFatJar.dependsOn ':common:modules:metrics-handler:jar'
 buildFatJar.dependsOn ':common:modules:heartbeat-handler:jar'

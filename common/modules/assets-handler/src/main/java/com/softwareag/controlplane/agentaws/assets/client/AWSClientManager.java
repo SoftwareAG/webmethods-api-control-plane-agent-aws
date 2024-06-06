@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
  * Creates AWS clients with region
  */
 
-public class AWSClientManager {
+public final class AWSClientManager {
     private static AWSClientManager awsClientManager;
     private final String region;
 

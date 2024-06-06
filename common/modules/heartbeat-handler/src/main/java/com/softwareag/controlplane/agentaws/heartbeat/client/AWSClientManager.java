@@ -7,7 +7,7 @@ import software.amazon.awssdk.services.apigateway.ApiGatewayClient;
 /**
  * Creates AWS clients with region
  */
-public class AWSClientManager {
+public final class AWSClientManager {
     private final String region;
     private static AWSClientManager awsClientManager;
 

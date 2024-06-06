@@ -1,6 +1,15 @@
 package com.softwareag.controlplane.agentaws.auth;
 
-import software.amazon.awssdk.auth.credentials.*;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.ContainerCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.ProcessCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
+
+import java.util.Locale;
 
 public class AWSCredentialsProvider {
 
@@ -23,7 +32,7 @@ public class AWSCredentialsProvider {
             return EnvironmentVariableCredentialsProvider.create();
         }
 
-        switch(ProviderType.valueOf(providerType.toUpperCase())) {
+        switch(ProviderType.valueOf(providerType.toUpperCase(Locale.ENGLISH))) {
             case SYSTEM_PROPERTY:
                 return SystemPropertyCredentialsProvider.create();
             case PROFILE:

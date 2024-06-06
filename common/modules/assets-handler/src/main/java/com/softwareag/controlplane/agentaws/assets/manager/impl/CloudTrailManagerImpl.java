@@ -25,10 +25,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
-public class CloudTrailManagerImpl implements CloudTrailManager {
+public final class CloudTrailManagerImpl implements CloudTrailManager {
     private static CloudTrailManagerImpl cloudTrailManager;
     CloudTrailClient cloudTrailClient;
     DefaultAgentLogger agentLogger;
+
+    private boolean setOwner;
+    private String operation;
 
     private CloudTrailManagerImpl(CloudTrailClient cloudTrailClient) {
         this.cloudTrailClient = cloudTrailClient;
@@ -91,19 +94,9 @@ public class CloudTrailManagerImpl implements CloudTrailManager {
 
     private void setIdAndOwner(List<String> apiEvents, Instant startTime, Instant endTime,
                                Map<String, Map<String, String>> modifiedApis) {
-        boolean setOwner;
-        String operation;
+
         for (String apiEvent : apiEvents) {
-            if (CloudTrailUtil.getApiCreateEvents().contains(apiEvent)) {
-                operation = Constants.CREATE;
-                setOwner = true;
-            } else if (CloudTrailUtil.getApiUpdateEvents().contains(apiEvent)) {
-                operation = Constants.UPDATE;
-                setOwner = false;
-            } else {
-                operation = Constants.DELETE;
-                setOwner = false;
-            }
+            isOwnerRequired(apiEvent);
 
             LookupAttribute attribute = LookupAttribute.builder().attributeKey(LookupAttributeKey.EVENT_NAME).
                     attributeValue(apiEvent).build();
@@ -130,12 +123,7 @@ public class CloudTrailManagerImpl implements CloudTrailManager {
                 }
 
                 //adding wait time to ensure less than 2 calls are made to CloudTrail
-                try {
-                    Thread.sleep(1000);
-                }
-                catch (InterruptedException e) {
-                    agentLogger.error("Thread interrupted during sleep", e);
-                }
+                addWaitTime();
 
                 response = cloudTrailClient.lookupEvents(eventsRequest);
                 for (Event event : response.events()) {
@@ -151,9 +139,32 @@ public class CloudTrailManagerImpl implements CloudTrailManager {
 
     }
 
+    private void isOwnerRequired(String apiEvent) {
+        if (CloudTrailUtil.getApiCreateEvents().contains(apiEvent)) {
+            operation = Constants.CREATE;
+            setOwner = true;
+        } else if (CloudTrailUtil.getApiUpdateEvents().contains(apiEvent)) {
+            operation = Constants.UPDATE;
+            setOwner = false;
+        } else {
+            operation = Constants.DELETE;
+            setOwner = false;
+        }
+    }
+
+    private void addWaitTime(){
+        try {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException e) {
+            agentLogger.error("Thread interrupted during sleep", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private void getOwnerFromResponse(Map<String, String> restApisOwner, boolean setOwner, Event event) {
         Optional<String> cloudTrailEvent = event.getValueForField(Constants.CLOUD_TRAIL_EVENT_FIELD, String.class);
-        JSONObject cloudTrailEventJson = new JSONObject(cloudTrailEvent.get());
+        JSONObject cloudTrailEventJson = new JSONObject(!cloudTrailEvent.isEmpty() ? cloudTrailEvent.get() : null);
         if (!cloudTrailEventJson.isNull(Constants.CLOUD_TRAIL_REQUEST_PARAMETERS)) {
             JSONObject response = (JSONObject) cloudTrailEventJson.get(Constants.CLOUD_TRAIL_REQUEST_PARAMETERS);
             String owner = setOwner ? event.username() : null;

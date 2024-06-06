@@ -3,6 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation "software.amazon.awssdk:auth:2.17.267"
-	implementation "software.amazon.awssdk:utils:2.17.267"
+    implementation rootProject.commonAuth
 }

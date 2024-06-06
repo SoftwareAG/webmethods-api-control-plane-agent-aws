@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MetricsManagerImplTest {
+class MetricsManagerImplTest {
     @Mock
     CloudWatchClient cloudWatchClient;
 
@@ -61,7 +61,7 @@ public class MetricsManagerImplTest {
 
     //Verify get metrics by statistics returns correct metric values for API and Runtime transactions.
     @Test
-    public void getMetricsByStatistics() throws NoSuchFieldException, IllegalAccessException {
+    void getMetricsByStatistics() throws NoSuchFieldException, IllegalAccessException {
         mockMetricStatistics();
 
         List<Metrics> metricsList = metricsManager.getMetrics(fromTimestamp, toTimestamp, intervalInSeconds, bufferIntervalInSeconds);
@@ -74,27 +74,26 @@ public class MetricsManagerImplTest {
         assertEquals(startTime.toEpochMilli(), metrics.getTimestamp());
 
         //verify API metrics
-        assertEquals(metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getTransactionCount(), 100);
-        assertEquals(metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendResponseTime(), 1.2F);
-        assertEquals(metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageLatency(), 1.14F);
-        assertEquals(metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageResponseTime(), 2.34F);
-        assertEquals(metrics.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("4xx").getTransactionCount(), 1);
-        assertEquals(metrics.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("5xx").getTransactionCount(), 2);
+        assertEquals(100, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getTransactionCount());
+        assertEquals(1.2F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(1.14F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageLatency());
+        assertEquals(2.34F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageResponseTime());
+        assertEquals(1, metrics.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("4xx").getTransactionCount());
+        assertEquals(2, metrics.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("5xx").getTransactionCount());
 
         //verify Runtime metrics
-        assertEquals(metrics.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount(), 100);
-        assertEquals(metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime(), 2.34F);
-        assertEquals(metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency(), 1.14F);
-        assertEquals(metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime(), 1.2F);
-        assertEquals(metrics.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("4xx").getTransactionCount(), 1);
-        assertEquals(metrics.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("5xx").getTransactionCount(), 2);
-
+        assertEquals(100, metrics.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount());
+        assertEquals(2.34F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime());
+        assertEquals(1.14F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency());
+        assertEquals(1.2F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(1, metrics.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("4xx").getTransactionCount());
+        assertEquals(2, metrics.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("5xx").getTransactionCount());
     }
 
 
     //Verify get metrics by data returns correct metric values for API and Runtime transactions.
     @Test
-    public void verifyGetMetricsByData() throws NoSuchFieldException, IllegalAccessException {
+    void verifyGetMetricsByData() throws NoSuchFieldException, IllegalAccessException {
         mockMetricData();
 
         List<Metrics> metrics = metricsManager.getMetrics(fromTimestamp, toTimestamp, intervalInSeconds, bufferIntervalInSeconds);
@@ -104,25 +103,25 @@ public class MetricsManagerImplTest {
 
         //verify API metrics for metrics2
         assertEquals(20, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getTransactionCount());
-        assertEquals(metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendResponseTime(), 0.9F);
-        assertEquals(metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageLatency(), 0.9F);
-        assertEquals(metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageResponseTime(), 1.8F);
-        assertEquals(metrics2.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("4xx").getTransactionCount(), 1);
-        assertEquals(metrics2.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("5xx").getTransactionCount(), 8);
+        assertEquals(0.9F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(0.9F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageLatency());
+        assertEquals(1.8F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageResponseTime());
+        assertEquals(1, metrics2.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("4xx").getTransactionCount());
+        assertEquals(8, metrics2.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("5xx").getTransactionCount());
 
         //verify Runtime metrics for metrics4
-        assertEquals(metrics4.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount(), 62);
-        assertEquals(metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime(), 3.8258064F);
-        assertEquals(metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency(), 1.9000001F);
-        assertEquals(metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime(), 1.9258064F);
-        assertEquals(metrics4.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("4xx").getTransactionCount(), 32);
-        assertEquals(metrics4.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("5xx").getTransactionCount(), 69);
+        assertEquals(62, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount());
+        assertEquals(3.8258064F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime());
+        assertEquals(1.9000001F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency());
+        assertEquals(1.9258064F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(32, metrics4.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("4xx").getTransactionCount());
+        assertEquals(69, metrics4.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("5xx").getTransactionCount());
     }
 
 
     //Verify if all the intervals within the defined period has a Metrics object associated with it.
     @Test
-    public void verifyIfMetricsAreReturnedForEveryTimestampInTheDefinedInterval() throws NoSuchFieldException, IllegalAccessException {
+    void verifyIfMetricsAreReturnedForEveryTimestampInTheDefinedInterval() throws NoSuchFieldException, IllegalAccessException {
         mockMetricData();
 
         List<Metrics> metrics = metricsManager.getMetrics(fromTimestamp, toTimestamp, intervalInSeconds, bufferIntervalInSeconds);
@@ -136,16 +135,16 @@ public class MetricsManagerImplTest {
         assertEquals(4, metrics.size());
 
         //verify if timestamps are correct
-        assertEquals(metrics1.getTimestamp(), startTime.toEpochMilli());
-        assertEquals(metrics2.getTimestamp(), startTime.plusSeconds(intervalInSeconds).toEpochMilli());
-        assertEquals(metrics3.getTimestamp(), startTime.plusSeconds(intervalInSeconds * 2).toEpochMilli());
-        assertEquals(metrics4.getTimestamp(), startTime.plusSeconds(intervalInSeconds * 3).toEpochMilli());
+        assertEquals(startTime.toEpochMilli(), metrics1.getTimestamp());
+        assertEquals(startTime.plusSeconds(intervalInSeconds).toEpochMilli(), metrics2.getTimestamp());
+        assertEquals(startTime.plusSeconds(intervalInSeconds * 2).toEpochMilli(), metrics3.getTimestamp());
+        assertEquals(startTime.plusSeconds(intervalInSeconds * 3).toEpochMilli(), metrics4.getTimestamp());
     }
 
 
     //Verify if no transaction metrics are generated if there are no transactions in a particular interval within the period
     @Test
-    public void verifyIfNoTransactionMetricsAreReturned() throws NoSuchFieldException, IllegalAccessException {
+    void verifyIfNoTransactionMetricsAreReturned() throws NoSuchFieldException, IllegalAccessException {
         mockMetricData();
 
         List<Metrics> metrics = metricsManager.getMetrics(fromTimestamp, toTimestamp, intervalInSeconds, bufferIntervalInSeconds);
@@ -153,19 +152,19 @@ public class MetricsManagerImplTest {
         Metrics metrics3 = metrics.get(2);
 
         //verify if only no apis transaction is present in metrics3
-        assertEquals(metrics3.getApiTransactionMetricsList().size(), 0);
+        assertEquals(0, metrics3.getApiTransactionMetricsList().size());
 
         //verify no transaction metric is created for metrics3(since there is no transaction for this timestamp metric)
-        assertEquals(metrics3.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount(), 0);
-        assertEquals(metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime(), 0);
-        assertEquals(metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency(), 0);
-        assertEquals(metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime(), 0);
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount());
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime());
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency());
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime());
     }
 
 
     //Verify if fromTimestamp validations take place(if it is undefined or is more than the toTimestamp)
     @Test
-    public void verifyIfMetricsAreReturnedIfTimestampIsInvalid() throws NoSuchFieldException, IllegalAccessException {
+    void verifyIfMetricsAreReturnedIfTimestampIsInvalid() throws NoSuchFieldException, IllegalAccessException {
         mockMetricStatistics();
 
         //fromTimestamp is not defined
@@ -251,17 +250,13 @@ public class MetricsManagerImplTest {
                 .thenAnswer(invocation -> {
                     GetMetricStatisticsRequest request = invocation.getArgument(0);
 
-                    if (request.metricName().equals(Constants.AWS_METRIC_COUNT)) {
-                        return response1;
-                    } else if(request.metricName().equals(Constants.AWS_METRIC_LATENCY)){
-                        return response2;
-                    } else if(request.metricName().equals(Constants.AWS_METRIC_INTEGRATION_LATENCY)) {
-                        return response3;
-                    } else if(request.metricName().equals(Constants.AWS_METRIC_CLIENT_ERROR)) {
-                        return response4;
-                    } else {
-                        return response5;
-                    }
+                    return switch (request.metricName()) {
+                        case Constants.AWS_METRIC_COUNT -> response1;
+                        case Constants.AWS_METRIC_LATENCY -> response2;
+                        case Constants.AWS_METRIC_INTEGRATION_LATENCY -> response3;
+                        case Constants.AWS_METRIC_CLIENT_ERROR -> response4;
+                        default -> response5;
+                    };
 
                 });
 

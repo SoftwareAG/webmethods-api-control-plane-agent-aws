@@ -9,6 +9,7 @@ import com.softwareag.controlplane.agentsdk.api.config.TlsConfig;
 import com.softwareag.controlplane.agentsdk.model.AssetSyncMethod;
 import com.softwareag.controlplane.agentsdk.model.Capacity;
 import com.softwareag.controlplane.agentsdk.model.Runtime;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,17 +23,6 @@ import software.amazon.awssdk.services.sts.model.GetCallerIdentityResponse;
  */
 @Configuration
 public class SDKConfigManager {
-    @Autowired
-    ControlPlaneProperties cpProperties;
-
-    @Autowired
-    AgentProperties agentProperties;
-
-    @Autowired
-    RuntimeProperties runtimeProperties;
-
-    @Autowired
-    private AWSProperties awsProperties;
 
     @Autowired
     private StsClient stsClient;
@@ -43,7 +33,7 @@ public class SDKConfigManager {
      * @return The configured SDK configuration.
      */
     @Bean
-    public SdkConfig sdkConfig() {
+    public SdkConfig sdkConfig(ControlPlaneProperties cpProperties, AgentProperties agentProperties, RuntimeProperties runtimeProperties, AWSProperties awsProperties) {
         TlsConfig tlsConfig = new TlsConfig
                 .Builder(cpProperties.getTrustStorePath(), cpProperties.getTrustStoreType())
                 .truststorePassword(cpProperties.getTrustStorePassword())
@@ -76,10 +66,13 @@ public class SDKConfigManager {
 
         String runtimeHost = String.format("https://%s.console.aws.amazon.com/apigateway", awsProperties.getRegion());
 
+
+        String runtimeRegion = ObjectUtils.isEmpty(runtimeProperties.getRegion()) && ObjectUtils.isNotEmpty(awsProperties.getRegion()) ?
+               awsProperties.getRegion() : runtimeProperties.getRegion();
         RuntimeConfig runtimeConfig = new RuntimeConfig.Builder(runtimeId, runtimeProperties.getName(), runtimeProperties.getTypeId(),
                 Runtime.DeploymentType.PUBLIC_CLOUD)
                 .description(runtimeProperties.getDescription())
-                .region(runtimeProperties.getRegion())
+                .region(runtimeRegion)
                 .location(runtimeProperties.getLocation())
                 .tags(runtimeProperties.getTags())
                 .capacity(capacity)
