@@ -1,1 +1,1 @@
-Place your Agent SDK jar files here before you build the repository
+**Note**: Copy **Agent SDK** (api, core, and model) Jars from the folder you extracted from the **Empower** portal and paste it in this location.

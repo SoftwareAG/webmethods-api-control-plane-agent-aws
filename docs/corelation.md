@@ -3,21 +3,40 @@
 
 | Amazon API Gateway | API Control Plane | Description |
 |--------------------|-------------------|-------------|
-| Stage |	Runtime Co-relation between Amazon API Gateway and API Control Plane terminologies | A stage in AWS API Gateway is considered as a runtime in API Control Plane. |
-| Deployment | API Versions | A deployment is a snapshot of an API, which tracks the version of an API. <br><br> An API in AWS API Gateway can have multiple deployments. Whereas only one deployment can be active at any time in the stage. |
+| Stage |Runtime | A stage in Amazon API Gateway is considered as a runtime in API Control Plane. |
+| Deployment | API Versions | A deployment in Amazon API Gateway is a snapshot that tracks an API's version. An API in Amazon API Gateway can have multiple deployments, but only one can be active per stage at a time. <br><br> In the API Control Plane, each deployment is called an API version. For example, if an API has two deployments published to two different stages, it is treated as two different versions of the same API in API Control Plane.  |
+
+## How to identify a unique stage in Amazon Gateway?
+
+Every unique *stage* within each region in AWS API Gateway is considered as a separate runtime in the API Control Plane. Hence, you must deploy an agent for each unique stage.
+
+For example: Assume that you have two accounts in **AWS** and each account has **AWS API Gateway** with APIs in the following regions and stages:
+
+**Account 1**:
+- *Region 1*: us-east-1
+    - *Stage*: dev (In APICP, this stage appears as **dev-account1-ue1** runtime from account 1 in region us-east-1)
+       - *API*s: API1, API2
+    - *Stage*: qa (In APICP, this stage appears as **qa-account1-ue1** runtime from account 1 in region us-east-1)
+       - *APIs*: API1, API2
+- *Region 2*: us-east-2
+    - *Stage*: dev (In APICP, this stage appears as **dev-account1-uw2** runtime from account 1 in region us-east-2)
+       - APIs: API3
+    - *Stage*: preprod (In APICP, this stage appears as **preprod-account1-uw2** runtime from account 1 in region us-east-2)
+       - *APIs*: API3
+    - *Stage*: prod (In APICP, this stage appears as **prod-account1-uw2** runtime from account 1 in region us-east-2)
+       - *APIs*: API3
+
+**Account 2**:
+- *Region 1*: us-east-1
+    - *Stage*: dev (In APICP, this stage appears as **dev-account2-ue1** runtime from account 2 in region us-east-1)
+      - *APIs*: API4
+    - *Stage*: prod (In APICP, this stage appears as **prod-account2-ue1** runtime from account 2 in region us-east-1)
+      - *APIs*: API4
 
 
+Please see the following diagram to understand how the stages are treated as different runtimes in the API Control Plane.
 
-For AWS API Gateway, you must develop an Agent for each distinct Stage. For example:
+![](../docs/images/aws_stages.png)
 
-If *API1* and *API2* are deployed across stages, *dev* and *qa* in *us-east-1* region under *account1*, 2 runtimes are required. That is, an Agent must be deployed for ‘dev’ and ‘qa’ each.
-
-If *API3* is deployed across stages, *dev*, *pre-prod*, and *prod* in *us-east-2* region under *account1*, 3 more runtimes are required. That is, an Agent must be deployed for ‘dev’, ‘pre-prod, and ‘prod’ each.
-
-If *API4* is deployed across stages, *dev* and *prod* in *us-east-1* region under *account2*, 2 additional runtimes are required. That is, an Agent must be deployed for ‘dev’ and ‘prod’ each.
-
-The following figure helps you identify the distinct stage:
-
-![](aws_stages.png)
 
 
