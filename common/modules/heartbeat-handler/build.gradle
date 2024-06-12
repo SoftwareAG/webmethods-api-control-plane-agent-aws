@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
 }
+apply from: '../../../settings/jacoco.gradle'
 
 dependencies {
     api project(':common:modules:auth')
@@ -16,4 +17,5 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
