@@ -39,9 +39,9 @@ public final class MetricsModelConverter {
                                                                     Double clientError, Double serverError) {
 
         APIMetrics apiMetrics = new APIMetrics.Builder(transactionCount.longValue())
-                .averageLatency(averageLatency.floatValue())
-                .averageResponseTime(latency.floatValue())
-                .averageBackendResponseTime(integrationLatency.floatValue()).build();
+                .averageGatewayLatency(averageLatency.floatValue())
+                .averageTotalLatency(latency.floatValue())
+                .averageBackendLatency(integrationLatency.floatValue()).build();
         APITransactionMetrics apiTransactionMetrics = new APITransactionMetrics.Builder(apiMetrics, api.getId(),
                 api.getName(), api.getVersion()).build();
         Map<String, APIMetrics> metricsBysStatusCode = new HashMap<>();
@@ -74,9 +74,9 @@ public final class MetricsModelConverter {
     public static Metrics createNoTransanctionMetrics(long timestamp) {
         List<APITransactionMetrics> apiTransactionMetricsList = new ArrayList<>();
         APIMetrics apiMetrics = new APIMetrics.Builder(0L)
-                .averageBackendResponseTime((float) 0)
-                .averageLatency((float) 0)
-                .averageResponseTime((float) 0)
+                .averageBackendLatency((float) 0)
+                .averageGatewayLatency((float) 0)
+                .averageTotalLatency((float) 0)
                 .build();
 
         return new Metrics.Builder()
@@ -109,17 +109,17 @@ public final class MetricsModelConverter {
         for (APITransactionMetrics apiTransactionMetrics : apiTransactionMetricsList) {
             long currentApiTransactionCount = apiTransactionMetrics.getApiMetrics().getTransactionCount();
             totalTransactionCount += currentApiTransactionCount;
-            totalLatencyOfAllApis += apiTransactionMetrics.getApiMetrics().getAverageLatency() * currentApiTransactionCount;
-            totalBackendResponseTimeOfAllApis += apiTransactionMetrics.getApiMetrics().getAverageBackendResponseTime() * currentApiTransactionCount;
-            totalResponseTimeOfAllApis += apiTransactionMetrics.getApiMetrics().getAverageResponseTime() * currentApiTransactionCount;
+            totalLatencyOfAllApis += apiTransactionMetrics.getApiMetrics().getAverageGatewayLatency() * currentApiTransactionCount;
+            totalBackendResponseTimeOfAllApis += apiTransactionMetrics.getApiMetrics().getAverageBackendLatency() * currentApiTransactionCount;
+            totalResponseTimeOfAllApis += apiTransactionMetrics.getApiMetrics().getAverageTotalLatency() * currentApiTransactionCount;
             clientError += apiTransactionMetrics.getMetricsByStatusCode().get(Constants.CP_METRIC_CLIENT_ERROR).getTransactionCount();
             serverError += apiTransactionMetrics.getMetricsByStatusCode().get(Constants.CP_METRIC_SERVER_ERROR).getTransactionCount();
         }
 
         APIMetrics runtimeMetrics = new APIMetrics.Builder(totalTransactionCount)
-                .averageLatency(totalLatencyOfAllApis != 0 && totalTransactionCount != 0 ? totalLatencyOfAllApis / totalTransactionCount : 0)
-                .averageBackendResponseTime(totalBackendResponseTimeOfAllApis != 0 && totalTransactionCount != 0 ? totalBackendResponseTimeOfAllApis / totalTransactionCount : 0)
-                .averageResponseTime(totalResponseTimeOfAllApis != 0 && totalTransactionCount != 0 ? totalResponseTimeOfAllApis / totalTransactionCount : 0).build();
+                .averageGatewayLatency(totalLatencyOfAllApis != 0 && totalTransactionCount != 0 ? totalLatencyOfAllApis / totalTransactionCount : 0)
+                .averageBackendLatency(totalBackendResponseTimeOfAllApis != 0 && totalTransactionCount != 0 ? totalBackendResponseTimeOfAllApis / totalTransactionCount : 0)
+                .averageTotalLatency(totalResponseTimeOfAllApis != 0 && totalTransactionCount != 0 ? totalResponseTimeOfAllApis / totalTransactionCount : 0).build();
 
         RuntimeTransactionMetrics runtimeTransactionMetrics = new RuntimeTransactionMetrics.Builder(runtimeMetrics).build();
         Map<String, APIMetrics> metricsByStatusCode = new HashMap<>();

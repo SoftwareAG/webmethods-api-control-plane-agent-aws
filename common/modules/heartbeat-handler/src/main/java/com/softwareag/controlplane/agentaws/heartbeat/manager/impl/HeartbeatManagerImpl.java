@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Implementation for the HeartbeatManager
  */
-public class HeartbeatManagerImpl implements HeartbeatManager {
+public final class HeartbeatManagerImpl implements HeartbeatManager {
 
     private static HeartbeatManagerImpl heartbeatManager;
 

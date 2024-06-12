@@ -75,17 +75,17 @@ class MetricsManagerImplTest {
 
         //verify API metrics
         assertEquals(100, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getTransactionCount());
-        assertEquals(1.2F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendResponseTime());
-        assertEquals(1.14F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageLatency());
-        assertEquals(2.34F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageResponseTime());
+        assertEquals(1.2F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendLatency());
+        assertEquals(1.14F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageGatewayLatency());
+        assertEquals(2.34F, metrics.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageTotalLatency());
         assertEquals(1, metrics.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("4xx").getTransactionCount());
         assertEquals(2, metrics.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("5xx").getTransactionCount());
 
         //verify Runtime metrics
         assertEquals(100, metrics.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount());
-        assertEquals(2.34F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime());
-        assertEquals(1.14F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency());
-        assertEquals(1.2F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(2.34F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageTotalLatency());
+        assertEquals(1.14F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageGatewayLatency());
+        assertEquals(1.2F, metrics.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendLatency());
         assertEquals(1, metrics.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("4xx").getTransactionCount());
         assertEquals(2, metrics.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("5xx").getTransactionCount());
     }
@@ -103,17 +103,17 @@ class MetricsManagerImplTest {
 
         //verify API metrics for metrics2
         assertEquals(20, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getTransactionCount());
-        assertEquals(0.9F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendResponseTime());
-        assertEquals(0.9F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageLatency());
-        assertEquals(1.8F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageResponseTime());
+        assertEquals(0.9F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageBackendLatency());
+        assertEquals(0.9F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageGatewayLatency());
+        assertEquals(1.8F, metrics2.getApiTransactionMetricsList().get(0).getApiMetrics().getAverageTotalLatency());
         assertEquals(1, metrics2.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("4xx").getTransactionCount());
         assertEquals(8, metrics2.getApiTransactionMetricsList().get(0).getMetricsByStatusCode().get("5xx").getTransactionCount());
 
         //verify Runtime metrics for metrics4
         assertEquals(62, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount());
-        assertEquals(3.8258064F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime());
-        assertEquals(1.9000001F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency());
-        assertEquals(1.9258064F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(3.8258064F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageTotalLatency());
+        assertEquals(1.9000001F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageGatewayLatency());
+        assertEquals(1.9258064F, metrics4.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendLatency());
         assertEquals(32, metrics4.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("4xx").getTransactionCount());
         assertEquals(69, metrics4.getRuntimeTransactionMetrics().getMetricsByStatusCode().get("5xx").getTransactionCount());
     }
@@ -156,9 +156,9 @@ class MetricsManagerImplTest {
 
         //verify no transaction metric is created for metrics3(since there is no transaction for this timestamp metric)
         assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getTransactionCount());
-        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageResponseTime());
-        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageLatency());
-        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendResponseTime());
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageTotalLatency());
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageGatewayLatency());
+        assertEquals(0, metrics3.getRuntimeTransactionMetrics().getApiMetrics().getAverageBackendLatency());
     }
 
 
