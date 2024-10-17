@@ -2,7 +2,7 @@
 
 ![Version 1.0.0](https://img.shields.io/badge/Version-1.0.0-blue)
 ![Agent SDK Version 1.0.0](https://img.shields.io/badge/Agent_SDK-1.0.0-green)
-![API Control Plane Version 11.0.3](https://img.shields.io/badge/API_Control_Plane-11.0.3-purple)
+![API Control Plane Version 11.0.5](https://img.shields.io/badge/API_Control_Plane-11.0.5-purple)
 ![Amazon API Gateway](https://img.shields.io/badge/Amazon-API_Gateway-blue)
 <br>
 ![Java 17](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java&logoColor=white)
@@ -42,7 +42,7 @@ The implementation leverages the following Amazon services:
 - **Amazon CloudWatch** service for retrieving API metrics.
 - **Amazon CloudTrail** service for retrieving  API activity.
 
-**Note:** ``` The agent implementation is compatible with API Control Plane version, 11.0.3 and currently supports only the REST APIs of Amazon API Gateway. ```
+**Note:** ``` The agent implementation is compatible with API Control Plane version, 11.0.5 and currently supports only the REST APIs of Amazon API Gateway. ```
 
 The AWS agent can be deployed in the following ways:
 
