@@ -5,11 +5,11 @@ Let’s look at a sample scenario through which you can build a Gradle project u
 
 **Pre-requisites** 
 
-Ensure that you:
+Ensure that you have:
 
-- Clone **webmethods-api-control-plane-agent-aws** Git Hub repository using any GIT client.
+- Cloned **webmethods-api-control-plane-agent-aws** Git Hub repository using any GIT client.
 - Downloaded the **IBM webMethods API Control Plane 3rd Party Runtime Agent SDK** zip file from [IBM Integration Community](https://community.ibm.com/community/user/integration/communities/community-home/all-news?communitykey=82b75916-ed06-4a13-8eb6-0190da9f1bfa&LibraryFolderKey=&DefaultView=&8e5b3238-cf51-4036-aa29-601a6cd3e1b3=eyJsaWJyYXJ5ZW50cnkiOiJhMDAxMzc2Ni0wMWNiLTQ3ZDUtYmQ3Yi0wMTkyNDllNDZjYzIifQ==).
-- Copy and paste the Agent SDK (api, core, and model) Jars from the extracted folder into the [Libs](../libs) directory in the cloned (api-controlplane-agent-aws) repository.
+- Copy and pasted the Agent SDK (api, core, and model) Jars from the extracted folder into the [Libs](../libs) directory in the cloned (api-controlplane-agent-aws) repository.
 
 
 **To build the Gradle project**
