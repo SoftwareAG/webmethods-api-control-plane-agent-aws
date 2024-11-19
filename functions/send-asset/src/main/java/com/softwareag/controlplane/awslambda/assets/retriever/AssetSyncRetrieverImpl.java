@@ -26,7 +26,7 @@ public class AssetSyncRetrieverImpl implements SyncAssetsHandler.AssetsRetriever
     @Override
     public List<AssetSyncAction<Asset>> getAssetSyncActions(long l, long l1) {
         return AssetsManagerImpl.getInstance(EnvProvider.getEnv(Constants.AWS_REGION))
-                .getModifiedRestAPIs(EnvProvider.getEnv(Constants.AWS_STAGE), l,
+                .getModifiedRestAPIs(EnvProvider.getEnv(Constants.AWS_STAGE), EnvProvider.getEnv(Constants.AWS_REGION),l,
                         Integer.parseInt(EnvProvider.getEnv(Constants.AWS_ASSETS_SYNC_BUFFER_INTERVAL_SECONDS)));
     }
 }

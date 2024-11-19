@@ -34,12 +34,13 @@ public final class APIModelConverter {
      * @return An Agent SDK API model representing the provided parameters.
      */
     public static API convertToAPIModel(String apiId, Map<String, String> tags, Stage stage,
-                                        JSONObject openAPISpecJson, String owner, Deployment deployment) {
+                                        JSONObject openAPISpecJson, String owner, Deployment deployment, String region) {
         return (API) new API.Builder(generateApiId(apiId, stage.deploymentId()), API.Type.REST)
                 .version(stage.deploymentId())
                 .versionSetId(apiId)
                 .status(Status.ACTIVE)
                 .policiesCount(getPoliciesCount(openAPISpecJson))
+                .relativeWebUrl("/main/apis/"+apiId+"/resources?api="+apiId+"&region="+region)
                 .owner(getOwner(owner))
                 .name(getApiName(openAPISpecJson))
                 .description(deployment.description())

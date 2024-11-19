@@ -34,7 +34,7 @@ public class AssetsRetrieverImpl implements SyncAssetsHandler.AssetsRetriever {
 
     private List<AssetSyncAction<Asset>> convertAPIsToAPISyncAction() {
         List<AssetSyncAction<Asset>> assetSyncActions = new ArrayList<>();
-        List<API> apis = AssetsManagerImpl.getInstance(EnvProvider.getEnv(Constants.AWS_REGION)).getRestAPIs(EnvProvider.getEnv(Constants.AWS_STAGE), true);
+        List<API> apis = AssetsManagerImpl.getInstance(EnvProvider.getEnv(Constants.AWS_REGION)).getRestAPIs(EnvProvider.getEnv(Constants.AWS_STAGE), EnvProvider.getEnv(Constants.AWS_REGION),true);
         for (API api : apis) {
             APISyncAction createAction = new APISyncAction(AssetType.API,
                     AssetSyncAction.SyncType.valueOf(com.softwareag.controlplane.agentaws.assets.constants.Constants.CREATE), api, System.currentTimeMillis());

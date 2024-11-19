@@ -34,6 +34,7 @@ import static com.softwareag.controlplane.agentaws.metrics.utils.MetricsModelCon
 public final class MetricsManagerImpl implements MetricsManager {
     private static MetricsManagerImpl cloudWatchManager;
     private final String stage;
+    private final String region;
     private final String getMetricsByData;
     
     private CloudWatchClient cloudWatchClient;
@@ -48,6 +49,7 @@ public final class MetricsManagerImpl implements MetricsManager {
 
     private MetricsManagerImpl(String region, String stage, String getMetricsByData) {
         this.stage = stage;
+        this.region=region;
         this.getMetricsByData = getMetricsByData;
         this.cloudWatchClient = AWSClientManager.getInstance(region).cloudWatchClient();
         this.assetsManager = AssetsManagerImpl.getInstance(region);
@@ -80,7 +82,7 @@ public final class MetricsManagerImpl implements MetricsManager {
      */
     @Override
     public List<Metrics> getMetrics(long fromTimestamp, long toTimestamp, long interval, int bufferSeconds) {
-        List<API> apis = assetsManager.getRestAPIs(stage, false); // get APIs for the configured stage
+        List<API> apis = assetsManager.getRestAPIs(stage, region,false); // get APIs for the configured stage
 
         long bufferedFromTimestamp = Utility.reduceEpochTime(fromTimestamp, bufferSeconds);
         long bufferedToTimestamp = Utility.reduceEpochTime(toTimestamp, bufferSeconds);

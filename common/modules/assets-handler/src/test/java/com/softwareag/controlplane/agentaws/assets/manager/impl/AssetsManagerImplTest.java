@@ -61,13 +61,13 @@ class AssetsManagerImplTest {
 
     @Test
     void testGetRestAPIs() {
-        List<API> apis = assetsManager.getRestAPIs("prod",false);
+        List<API> apis = assetsManager.getRestAPIs("prod","us-east-1",false);
         assertEquals(2, apis.size());
     }
 
     @Test
     void testGetRestAPIsWithOwnerInfo() {
-        List<API> apis = assetsManager.getRestAPIs("dev",true);
+        List<API> apis = assetsManager.getRestAPIs("dev","us-east-1",true);
         assertEquals(3, apis.size());
         assertNotNull(apis.get(1).getOwner());
         assertEquals(2, apis.get(1).getPoliciesCount());
@@ -78,7 +78,7 @@ class AssetsManagerImplTest {
         mockGetRestAPI();
         mockGetModifiedAPIs();
 
-        List<AssetSyncAction<Asset>> syncActions = assetsManager.getModifiedRestAPIs("prod",1715677954960L,300);
+        List<AssetSyncAction<Asset>> syncActions = assetsManager.getModifiedRestAPIs("prod","us-east-1",1715677954960L,300);
         assertEquals(9, syncActions.size());
     }
 

@@ -223,7 +223,7 @@ class MetricsManagerImplTest {
         List<API> apis = new ArrayList<>();
         apis.add(api);
 
-        when(assetsManager.getRestAPIs(stage, false)).thenReturn(apis);
+        when(assetsManager.getRestAPIs(stage, region,false)).thenReturn(apis);
 
         List<Datapoint> datapoints1 = new ArrayList<>();
         datapoints1.add(Datapoint.builder().sum(100D).timestamp(startTime).build());
@@ -288,7 +288,7 @@ class MetricsManagerImplTest {
         apis.add(api1);
         apis.add(api2);
 
-        when(assetsManager.getRestAPIs(stage, false)).thenReturn(apis);
+        when(assetsManager.getRestAPIs(stage, region,false)).thenReturn(apis);
         when(api1.getName()).thenReturn(apiName1);
         when(api2.getName()).thenReturn(apiName2);
 

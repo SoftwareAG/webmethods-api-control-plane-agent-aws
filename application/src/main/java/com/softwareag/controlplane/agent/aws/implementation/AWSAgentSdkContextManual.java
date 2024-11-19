@@ -59,7 +59,7 @@ public class AWSAgentSdkContextManual implements AgentSDKContextManual {
      */
     @Override
     public List<API> getAPIs() {
-        return assetsManager.getRestAPIs(awsProperties.getStage(), true);
+        return assetsManager.getRestAPIs(awsProperties.getStage(),awsProperties.getRegion(), true);
     }
 
     /**
@@ -83,7 +83,7 @@ public class AWSAgentSdkContextManual implements AgentSDKContextManual {
      */
     @Override
     public List<AssetSyncAction<Asset>> getAssetSyncActions(long l) {
-        return assetsManager.getModifiedRestAPIs(awsProperties.getStage(), l, awsProperties.getAssetsSyncBufferIntervalSeconds());
+        return assetsManager.getModifiedRestAPIs(awsProperties.getStage(),awsProperties.getRegion(), l, awsProperties.getAssetsSyncBufferIntervalSeconds());
     }
 
     /**

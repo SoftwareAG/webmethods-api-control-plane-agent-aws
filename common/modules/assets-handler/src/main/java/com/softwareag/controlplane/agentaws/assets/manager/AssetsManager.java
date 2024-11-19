@@ -16,7 +16,7 @@ public interface AssetsManager {
      * @param stage The stage for which the agent is configured.
      * @return The list of APIs belonging to the stage
      */
-    List<API> getRestAPIs(String stage, boolean isOwnerRequired);
+    List<API> getRestAPIs(String stage,String region,boolean isOwnerRequired);
 
 
     /**
@@ -27,5 +27,5 @@ public interface AssetsManager {
      * @param bufferTime     The assumed time,in seconds, it takes for an event to register to AWS CloudTrail after it occurred.
      * @return A list of AssetSyncAction objects for APIs modified after the assetSyncTime.
      */
-    List<AssetSyncAction<Asset>> getModifiedRestAPIs(String stage, Long assetSyncTime, int bufferTime);
+    List<AssetSyncAction<Asset>> getModifiedRestAPIs(String stage,String region, Long assetSyncTime, int bufferTime);
 }

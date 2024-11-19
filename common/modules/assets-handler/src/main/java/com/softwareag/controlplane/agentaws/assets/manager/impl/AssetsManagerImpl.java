@@ -62,7 +62,7 @@ public final class AssetsManagerImpl implements AssetsManager {
      * @return The list of APIs belonging to the stage
      */
     @Override
-    public List<API> getRestAPIs(String stage, boolean isOwnerRequired) {
+    public List<API> getRestAPIs(String stage,String region, boolean isOwnerRequired) {
         GetRestApisResponse restApisResponse = apiGatewayClient.getRestApis();
         List<RestApi> restApis = restApisResponse.items();
         List<API> apis = new ArrayList<>();
@@ -74,13 +74,12 @@ public final class AssetsManagerImpl implements AssetsManager {
             GetStagesRequest stagesRequest = GetStagesRequest.builder().restApiId(restApi.id()).build();
             GetStagesResponse stagesResponse = apiGatewayClient.getStages(stagesRequest);
             List<Stage> stages = stagesResponse.item();
-            API api = getAPIFromStage(stage, stages, restApi.id(), restApi.tags(), restApisOwner != null ? restApisOwner.get(restApi.id()) : null);
+            API api = getAPIFromStage(stage, stages, restApi.id(), restApi.tags(), restApisOwner != null ? restApisOwner.get(restApi.id()) : null,region);
             if (api != null) {
                 apis.add(api);
             }
         }
         return apis;
-
     }
 
     /**
@@ -92,18 +91,18 @@ public final class AssetsManagerImpl implements AssetsManager {
      * @return A list of AssetSyncAction objects for APIs modified after the assetSyncTime.
      */
     @Override
-    public List<AssetSyncAction<Asset>> getModifiedRestAPIs(String stage, Long assetSyncTime, int bufferTime) {
+    public List<AssetSyncAction<Asset>> getModifiedRestAPIs(String stage, String region, Long assetSyncTime, int bufferTime) {
         List<AssetSyncAction<Asset>> assetSyncActions = new ArrayList<>();
         Map<String, Map<String, String>> modifiedApis = cloudTrailManager.getModifiedAPIs(assetSyncTime, bufferTime);
         for (Map.Entry<String, Map<String, String>> entry: modifiedApis.entrySet()) {
             String operation = entry.getKey();
             Map<String, String> apis = entry.getValue();
-            addAssetSyncActions(apis, operation, stage, assetSyncTime, assetSyncActions);
+            addAssetSyncActions(apis, operation, stage, assetSyncTime, assetSyncActions,region);
         }
         return assetSyncActions;
     }
 
-    private void addAssetSyncActions(Map<String, String> apis, String operation, String stage, Long assetSyncTime, List<AssetSyncAction<Asset>> assetSyncActions) {
+    private void addAssetSyncActions(Map<String, String> apis, String operation, String stage, Long assetSyncTime, List<AssetSyncAction<Asset>> assetSyncActions,String region) {
         for (Map.Entry<String, String> entry : apis.entrySet()) {
             String restApiID = entry.getKey();
             if (Constants.DELETE.equals(operation)) {
@@ -115,7 +114,7 @@ public final class AssetsManagerImpl implements AssetsManager {
                 GetStagesRequest stagesRequest = GetStagesRequest.builder().restApiId(restApiID).build();
                 GetStagesResponse stagesResponse = apiGatewayClient.getStages(stagesRequest);
                 List<Stage> stages = stagesResponse.item();
-                API api = getAPIFromStage(stage, stages, restApiID, restApiResponse.tags(), apis.get(restApiID));
+                API api = getAPIFromStage(stage, stages, restApiID, restApiResponse.tags(), apis.get(restApiID),region);
                 if (api != null) {
                     if(Constants.CREATE.equals(operation)) {
                         //delete previous deployment
@@ -163,7 +162,7 @@ public final class AssetsManagerImpl implements AssetsManager {
      * @return Agent SDK API model if the API belongs to configured stage
      */
     private API getAPIFromStage(String stage, List<Stage> stages, String apiId, Map<String, String> apiTags,
-                                String owner) {
+                                String owner,String region) {
         API api = null;
         for (Stage stageOfApi : stages) {
             if (stage.equals(stageOfApi.stageName())) {
@@ -176,7 +175,6 @@ public final class AssetsManagerImpl implements AssetsManager {
                 JSONObject openAPISpecJson = new JSONObject(exportResponse.body().asUtf8String());
                 GetDeploymentsRequest deploymentsRequest = GetDeploymentsRequest.builder().restApiId(apiId).build();
                 GetDeploymentsResponse deploymentResponse = apiGatewayClient.getDeployments(deploymentsRequest);
-
                 Deployment deployment = null;
                 for(Deployment d : deploymentResponse.items()) {
                     if(stageOfApi.deploymentId().equals(d.id())) {
@@ -184,7 +182,7 @@ public final class AssetsManagerImpl implements AssetsManager {
                         break;
                     }
                 }
-                api = APIModelConverter.convertToAPIModel(apiId, apiTags, stageOfApi, openAPISpecJson, owner, deployment);
+                api = APIModelConverter.convertToAPIModel(apiId, apiTags, stageOfApi, openAPISpecJson, owner, deployment, region);
                 break;
             }
         }
