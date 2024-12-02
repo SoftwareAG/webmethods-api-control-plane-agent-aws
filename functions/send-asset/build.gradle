@@ -20,6 +20,10 @@ task buildFatJar(type: Jar) {
     destinationDirectory = file('../build/libs/java/lib')
 }
 
+buildFatJar {
+    exclude 'META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat'
+}
+
 task buildLayerZip(type: Zip) {
     from '../build/libs'
     include 'java/*/*'

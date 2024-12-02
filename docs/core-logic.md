@@ -9,8 +9,7 @@ Let’s understand the logic of how the agent for Amazon API Gateway is implemen
 2. **Retrieving Amazon API Gateway’s health status and sending it to API Control Plane**.
 
     1. The agent retrieves all REST APIs from the Amazon API Gateway.
-    2. For each API, the agent verifies if the API is associated with the specified stage (from the properties).
-    3. If the API is associated with the stage, the agent sends the health status (heartbeat) of the runtime (stage) as *active* to API Control Plane.<br><br>
+    2. The agent verifies if at least one API is deployed to the specified stage in the given region (as per the properties). If an API is deployed, the agent sends          the runtime (stage) health status as *active* to the API Control Plane.<br><br>
 
 3. **Publishing Amazon API Gateway’s assets to API Control Plane**. 
 

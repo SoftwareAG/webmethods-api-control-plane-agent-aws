@@ -5,6 +5,13 @@
 ![API Control Plane Version 11.0.5](https://img.shields.io/badge/API_Control_Plane-11.0.5-purple)
 ![Amazon API Gateway](https://img.shields.io/badge/Amazon-API_Gateway-blue)
 <br>
+![Amazon Lambda Functions](https://img.shields.io/badge/Amazon-Lambda_Functions-purple)
+![Amazon SDK](https://img.shields.io/badge/Amazon-SDK-red)
+![Amazon CloudWatch](https://img.shields.io/badge/Amazon-CloudWatch-green)
+![Amazon CloudTrail](https://img.shields.io/badge/Amazon-CloudTrail-yellow)
+![Amazon EventBridge Scheduler](https://img.shields.io/badge/Amazon-EventBridge_Scheduler-blue)
+<br>
+
 ![Java 17](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java&logoColor=white)
 ![Gradle 7.4.2](https://img.shields.io/badge/Gradle-7.4.2-DD0031?style=for-the-badge&logo=java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
@@ -18,12 +25,13 @@ This repository holds an agent implementation Java project for connecting Amazon
 5. Retrieving metrics from Amazon API Gateway to API Control Plane.
   
 This project is developed using **Java 17** and **Gradle 7.4.2**<br>
-If you plan to upgrade *Gradle*, ensure that you also upgrade the supported *Java version* accordingly. For details about the compatibility between *Java* and *Gradle* versions, see [Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html).
+If you use different versions of *Java* or *Gradle*, ensure they are compatible with each other. For details about the compatibility between Java and Gradle versions, see [Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html).
 
 ## Table of Contents
 - [Implementation Overview](#implementation-overview)
   - [Core Implementation Logic](docs/core-logic.md)
   - [Customize the Core Implementation Logic](common/)
+  - [Differences between Spring Boot Application and Functions (AWS lambda) Flavour](docs/differences.md)
 - [How is this Repository Structured?](docs/repo-structure.md)
 - [Co-relation Between Amazon API Gateway and API Control Plane Terminologies](docs/corelation.md)
 - [How to Build the Gradle Project?](devops/)
@@ -31,12 +39,13 @@ If you plan to upgrade *Gradle*, ensure that you also upgrade the supported *Jav
   - [Authentication](docs/authentication.md)
   - [How to Create the Runtime Type in API Control Plane?](docs/runtime_service_mgmt_api.md)
 - [How to Deploy and Run the AWS Agent in AWS Lambda?](functions/)
+  - [Lambda Functions-Environment variables](docs/lambda-properties.md) 
 - [Best Practices](docs/best-practices.md)
   
 
 ## Implementation Overview
 
-The implementation utilizes the **Manual** approach of Agent SDK and provides options for deploying the AWS agent as a stand-alone application. For details about the approaches and deployment modes, see [Agent SDK](https://docs.webmethods.io/apicontrolplane/agent_sdk/chapter2wco/#gsc.tab=0) documentation.
+The implementation utilizes the **Manual** approach of Agent SDK and provides options for deploying the AWS agent as a stand-alone application. For details about the approaches and deployment modes, see **Agent** section in [API Control Plane](https://docs.webmethods.io/#api-management-saas) documentation.
 The implementation leverages the following Amazon services:
 - **AWS SDK** for connection management and authentication. 
 - **Amazon CloudWatch** service for retrieving API metrics.
@@ -48,6 +57,8 @@ The AWS agent can be deployed in the following ways:
 
 - **Spring Boot application**
 - **AWS Lambda**<br>
+
+To understand the differences between Spring Boot application and AWS Lambda deployment modes, see [Differences](docs/differences.md).
 
 For a detailed understanding of how the agent for Amazon API Gateway is implemented, see [Core Implementation Logic](docs/core-logic.md).
 

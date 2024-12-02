@@ -1,7 +1,24 @@
+## Table of Contents
+- [How AWS Lambda works?](#how-aws-lambda-works)
+- [AWS Lambda Implementation Overview](#aws-lambda-implementation-overview)
+- [Artifacts to configure AWS Lambda Functions and their Capabilities](#artifacts-to-configure-aws-lambda-functions-and-their-capabilities)
+- [How to deploy the AWS Agent in AWS Lambda?](#how-to-deploy-the-aws-agent-in-aws-lambda)
+  - [Pre-requisites](#pre-requisites)
+  - [Step 1. Create a Lambda function, Heartbeatshandler](#step-1-create-a-lambda-function-heartbeatshandler)
+  - [Step 2: Configure a Lambda Layer](#step-2-configure-a-lambda-layer)
+  - [Step 3: Specify the required configurations for the Lambda function, Heartbeatshandler to run](#step-3-specify-the-required-configurations-for-the-lambda-function-heartbeatshandler-to-run)
+    - [A. Configure the Lambda Layer, AWSLambdaLayer for the Lambda function, Heartbeatshandler](#a-configure-the-lambda-layer-awslambdalayer-for-the-lambda-function-heartbeatshandler)
+    - [B. Upload the Heartbeat Jar](#b-upload-the-heartbeat-jar)
+    - [C. Specify the runtime settings](#c-specify-the-runtime-settings)
+    - [D. Specify the Environment variables](#d-specify-the-environment-variables)<br>
+      - [Lambda Functions-Environment variables](../docs/lambda-properties.md) 
+  - [Step 4: Specify the Amazon EventBridge Scheduler for the Heartbeatshandler Function](#step-4-specify-the-amazon-eventbridge-scheduler-for-the-heartbeatshandler-function)
+- [Class and Method names required for configuring Lambda Functions](#class-and-method-names-required-for-configuring-lambda-functions)
+
 
 ## How AWS Lambda works?
 
-The Lambda function is the principal resource that you can invoke to run your application code in Lambda. A function has code to process the events that you pass into the function. You must configure a Lambda function for each functional use case that an agent can perform. Once configured, the Lambda function gets automatically invoked when an event occurs. For more details, see [Functions](https://docs.aws.amazon.com/whitepapers/latest/security-overview-aws-lambda/lambda-functions-and-layers.html).
+The Lambda function is the principal resource that you can invoke to run your application code in Lambda. A function has code to process the events that you pass into the function. You must configure a Lambda function for each functional use case that an agent can perform. Once configured, the Lambda function gets automatically invoked when an event occurs. For more details, see [AWS documentation](https://docs.aws.amazon.com/whitepapers/latest/security-overview-aws-lambda/lambda-functions-and-layers.html).
 
 
 ## AWS Lambda Implementation Overview
@@ -40,9 +57,9 @@ The registration logic and **Publish Assets** logic is written as [initializatio
 
 
 ## How to deploy the AWS Agent in AWS Lambda?
-Let’s look at a sample scenario through which you can configure a Lambda function, **Heartbeatshandler** (for retrieving AWS API Gateway’s health status and sending it to API Control Plane) using the *Lambda console*. 
+Let’s look at a sample scenario through which you can configure a Lambda function, **Heartbeatshandler** (for retrieving AWS API Gateway’s health status and sending it to API Control Plane) using the *Lambda console*. Follow the same procedure to create and configure the Lambda function for retrieving APIs, and Metrics. For details about the class and method names required for configuring Lambda Functions, see [Handler field values](#class-and-method-names-required-for-configuring-lambda-functions).
 
-**Pre-requisites**
+### Pre-requisites
 
 Ensure that you have
 
@@ -63,7 +80,8 @@ Ensure that you have
 	 
 **To deploy an agent in AWS Lambda**
 
-**Step 1. Create a Lambda function, Heartbeatshandler.**<br>
+### Step 1. Create a Lambda function, Heartbeatshandler.
+
 **Note**: ``` Ensure to create the Lambda function in the same region where Amazon API Gateway is hosted. ```
 
 a. Open AWS Lambda Service.<br>
@@ -81,7 +99,7 @@ d. Edit the following details as required in the **Basic information** section:
 ![image](../docs/images/create_function.png)
 Lambda creates a function, *Heartbeatshandler*, which is listed under *Functions*.
 
-**Step 2: Configure a Lambda Layer**
+### Step 2: Configure a Lambda Layer
 
 A Lambda layer is a .zip file archive that contains the dependencies for the agent to run. Uploading the dependencies in the Layer reduces the size of the deployment package, separates core function logic from dependencies, and lets you share the dependencies across multiple functions.
 
@@ -101,7 +119,7 @@ c. Edit the following details as required:
 ![image](../docs/images/create_layer.png)<br>
 The Lambda layer, *AWSLambdaLayer* is created, which can be configured in all the Lambda functions.
 
-**Step 3: Specify the required configurations for the Lambda function, Heartbeatshandler to run.**
+### Step 3: Specify the required configurations for the Lambda function, Heartbeatshandler to run.
 
 a. Click **Functions** from the left navigation pane.<br>
 b. Choose **Heartbeatshandler** function.<br>
@@ -109,59 +127,57 @@ c. Select the **Code** tab.<br>
 
 **To add the configurations for *Heartbeatshandler* function**:
 
-1. Configure the Lambda Layer, *AWSLambdaLayer* for the Lambda function, *Heartbeatshandler*.
+#### A. Configure the Lambda Layer, *AWSLambdaLayer* for the Lambda function, *Heartbeatshandler*
 
-	1. Select **Layers** and click **Add a Layer**.
-	![image](../docs/images/configure_layer.png)
-	2. Choose the Layer source as **Custom Layers**.
-	3. Select **AWSLambdaLayer** in the Custom Layers drop down menu.
-	4. Choose the Version as **1**.
-	5. Click **Add**.
-	![image](../docs/images/configure_layer_2.png)
-	*AWSLambdaLayer* is added to the *Heartbeatshandler* function.
+1. Select **Layers** and click **Add a Layer**.
+![image](../docs/images/configure_layer.png)
+2. Choose the Layer source as **Custom Layers**.
+3. Select **AWSLambdaLayer** in the Custom Layers drop down menu.
+4. Choose the Version as **1**.
+5. Click **Add**.
+![image](../docs/images/configure_layer_2.png)
+*AWSLambdaLayer* is added to the *Heartbeatshandler* function.
 
-2. Upload the Heartbeat Jar.
+#### B. Upload the Heartbeat Jar
 
-	1. Select **Code source > Upload** and select the **send-heartbeat.jar** located at *functions / send-heartbeat / build / libs*.
-	2. Click **Save**.
-	![image](../docs/images/configure_layer_3.png)
-	The *send-heartbeat.jar* is uploaded. You can verify the *package size* under *code properties* to know if the Jar is uploaded.
-
-
-3. Specify the runtime settings.
-
-	1. Click **Edit**. 
-	![image](../docs/images/configure_layer_4.png)
-	2. **Handler**. Specify the *Class* and *Method* name from the **send-heartbeat.jar**, which triggers when the **Heartbeatshandler** function is invoked.
-	By default, ``` com.example.Function::Handle ``` is populated in the field.<br>
-	Here, **com.example.Function** must be replaced with the **Class name** and **Handle** must be replaced with the **Method name** from **send-heartbeat.jar**<br>
-	**To identify the Class name**:<br> 
-	Go to **send-heartbeat.jar** in any IDE such as IntelliJ or Visual Studio Code and select **Functions > send-heartbeat > build > src > main > FunctionHandler**,  right click and copy the reference.
-	![image](../docs/images/configure_layer_5.png)
-	Paste the reference in the default value in the field.<br>
-	For example, **com.softwareag.controlplane.awslambda.heartbeat.FunctionHandler**::Handle<br><br>
-	**To identify the Method name**:<br>
-	In the **FunctionHandler** Class, **handleEvent** is the method that is invoked with every Lambda function, *Heartbeatshandler* call.
-	Copy and paste the Method name, **handleEvent** in the default value.
-	![image](../docs/images/configure_layer_6.png)
-	For example, com.softwareag.controlplane.awslambda.heartbeat.FunctionHandler:: **handleEvent**
-	3. Click **Save**.<br>
-	![image](../docs/images/configure_layer_7.png)<br>
-	The Runtime settings are configured.
-
-4. Specify the Environment variables.
-
-   Environment variables include Amazon API Gateway, agent, runtime, and API Control Plane configurations. These configurations are required to connect Amazon API 
-   Gateway with API Control Plane. 
-
-	1. Click **Configuration > Environment variables**.
-	2. Click **Edit**.
-	![image](../docs/images/env_variables.png)
-	3. Add the values against each Environment variable. For details about the variables and recommended value, see [How to run the Spring Boot application in Docker?](../application) 
-           All the variables mentioned in that section are applicable for AWS Lambda except the AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION.
+1. Select **Code source > Upload** and select the **send-heartbeat.jar** located at *functions / send-heartbeat / build / libs*.
+2. Click **Save**.
+![image](../docs/images/configure_layer_3.png)
+The *send-heartbeat.jar* is uploaded. You can verify the *package size* under *code properties* to know if the Jar is uploaded.
 
 
-**Step 4: Specify the Amazon EventBridge Scheduler for the Heartbeatshandler Function.**
+#### C. Specify the runtime settings.
+
+1. Click **Edit**. 
+![image](../docs/images/configure_layer_4.png)
+2. **Handler**. Specify the *Class* and *Method* name from the **send-heartbeat.jar**, which triggers when the **Heartbeatshandler** function is invoked.
+By default, ``` com.example.Function::Handle ``` is populated in the field.<br>
+Here, **com.example.Function** must be replaced with the **Class name** and **Handle** must be replaced with the **Method name** from **send-heartbeat.jar**<br>
+**To identify the Class name**:<br> 
+Go to **send-heartbeat.jar** in any IDE such as IntelliJ or Visual Studio Code and select **Functions > send-heartbeat > build > src > main > FunctionHandler**,  right click and copy the reference.
+![image](../docs/images/configure_layer_5.png)
+Paste the reference in the default value in the field.<br>
+For example, **com.softwareag.controlplane.awslambda.heartbeat.FunctionHandler**::Handle<br><br>
+**To identify the Method name**:<br>
+In the **FunctionHandler** Class, **handleEvent** is the method that is invoked with every Lambda function, *Heartbeatshandler* call.
+Copy and paste the Method name, **handleEvent** in the default value.
+![image](../docs/images/configure_layer_6.png)
+For example, com.softwareag.controlplane.awslambda.heartbeat.FunctionHandler::**handleEvent**
+3. Click **Save**.<br>
+![image](../docs/images/configure_layer_7.png)<br>
+The Runtime settings are configured.
+
+#### D. Specify the Environment variables.
+
+Environment variables include Amazon API Gateway, agent, runtime, and API Control Plane configurations. These configurations are required to connect Amazon API 
+Gateway with API Control Plane. 
+
+1. Click **Configuration > Environment variables**.
+2. Click **Edit**.
+![image](../docs/images/env_variables.png)
+3. Add the Environment variables and their values . For details about the variables and recommended value, see [Lambda Functions-Environment variables](../docs/lambda-properties.md). 
+          
+### Step 4: Specify the Amazon EventBridge Scheduler for the Heartbeatshandler Function.
 
 To set a trigger point for the *Heartbeatshandler* Function, leverage the *Amazon EventBridge Scheduler service*. 
 
@@ -218,13 +234,24 @@ retrieves AWS API Gateway’s heartbeats(status) and sends to API Control Plane.
 	
 15. Verify if the runtime is registered with API Control Plane and if the heartbeats (status) are sent to API Control Plane successfully. 
     1. Open the API Control Plane application.<br>
-    2. Click on the **Runtimes** tab.<br>
-    3. Check if the AWS API Gateway (runtime) name specified in the Environment variables section is listed in the **Manage Runtimes** page.<br>
+    2. Click **Catalog > Runtimes** tab.<br>
+    3. Check if the AWS API Gateway (runtime) name specified in the Environment variables section is listed.<br>
        If the runtime is listed, it indicates that the runtime is successfully registered with the API Control Plane.
     4. Check the status of that corresponding runtime in the **Status** column.
         The status appears *green* only if the runtime is up and the heartbeats (status) are received successfully by the API Control Plane.
 
-**_Note_**: You must follow the same procedure to create and configure the Lambda functions for APIs and Metrics.<br> When you create and configure the Lambda functions for retrieving and sending APIs and metrics to API Control Plane, add the following class name and method name in the **Handler** field in the **runtime settings**:<br><br>For the **APIs** Lambda function, enter the following in the **Handler** field:<br> *com.softwareag.controlplane.awslambda.assets.FunctionHandler:: handleEvent*<br><br>For the **metrics** Lambda function, enter the following in the **Handler** field:<br> *com.softwareag.controlplane.awslambda.metrics.FunctionHandler:: handleEvent*<br>For details, see *Step 3: Specify the required configurations for the Lambda function, Heartbeatshandler to run.*<br><br>
+**_Note_**: You must follow the same procedure to create and configure the Lambda functions for APIs and Metrics.
+
+#### Class and Method names required for configuring Lambda Functions
+
+The following table lists the Class and Method names to be specified in the **Handler** field in the **runtime settings** page when you configure the respective Lambda Functions. For details, see [Specify the runtime settings](#c-specify-the-runtime-settings).<br><br>
+
+| Lambda Function | ClassName::MethodName |
+|--------------------|-------------------|
+| Heartbeat | com.softwareag.controlplane.awslambda.heartbeat.FunctionHandler::handleEvent | 
+| APIs | com.softwareag.controlplane.awslambda.assets.FunctionHandler::handleEvent |
+| Metrics | com.softwareag.controlplane.awslambda.metrics.FunctionHandler::handleEvent |
+
 Once configured, all the Lambda functions get automatically triggered based on the EventBridge scheduler, and the application logic of the respective Lambda functions gets executed, establishing the connection between Amazon Gateway and API Control Plane.<br>
 
 Additionally, If you want to troubleshoot the executions of the lambda functions, the *Monitor* tab within the Lambda function enables you to monitor the *cloudWatch metrics* and the *Amazon cloudWatch logs* enable you to analyze all the requests handled by your Lambda function. For more details, see [Monitoring and troubleshooting Lambda functions](https://docs.aws.amazon.com/lambda/latest/dg/lambda-monitoring.html), [Cloud Watch Logs](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html), [Cloud Trail Events](https://docs.aws.amazon.com/lambda/latest/dg/logging-using-cloudtrail.html).
