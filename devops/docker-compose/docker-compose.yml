@@ -14,10 +14,10 @@ services:
       - aws.metrics-sync-buffer-interval-seconds=${AWS_METRICS_SYNC_BUFFER_INTERVAL_SECONDS}
       - apicp.publish-assets=${APICP_PUBLISH_ASSETS}
       - apicp.sync-assets=${APICP_SYNC_ASSETS}
-      - apicp.sync-metrics=${APICP_SEND_METRICS}
-      - apicp.heartbeat-sync-interval-seconds=${APICP_HEARTBEAT_SEND_INTERVAL_SECONDS}
+      - apicp.send-metrics=${APICP_SEND_METRICS}
+      - apicp.heart-beat-send-interval-seconds=${APICP_HEART_BEAT_SEND_INTERVAL_SECONDS}
       - apicp.assets-sync-interval-seconds=${APICP_ASSETS_SYNC_INTERVAL_SECONDS}
-      - apicp.metrics-sync-interval-seconds=${APICP_METRICS_SEND_INTERVAL_SECONDS}
+      - apicp.metrics-send-interval-seconds=${APICP_METRICS_SEND_INTERVAL_SECONDS}
       - apicp.runtime.name=${APICP_RUNTIME_NAME}
       - apicp.runtime.description=${APICP_RUNTIME_DESCRIPTION}
       - apicp.runtime.region=${APICP_RUNTIME_REGION}

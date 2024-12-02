@@ -1,5 +1,6 @@
 package com.softwareag.controlplane.agent.aws.configuration;
 
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,6 +21,7 @@ public class AWSProperties {
     private String stage;
     @NotNull
     private String metricsByDataOrStatistics;
+    @Min(600)
     private int metricsSyncBufferIntervalSeconds;
     private int assetsSyncBufferIntervalSeconds;
 }
